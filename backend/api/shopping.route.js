@@ -17,8 +17,8 @@ router.put("/createAccount", (req, res) => {
     // calculate bcrypt value from password
     bcrypt.hash(passWord, saltRounds, (err, hash) => {
         bcrypt_value = hash;
-    })
-
+    });
+    let response = {bcryptValue: bcrypt_value};
     Login.findOne({username: userName, password: passWord}, (err, possibleUser) => {
         // if possibleUser is null, then there is currently no user with this login, 
         // otherwise some user is using this login
@@ -29,11 +29,12 @@ router.put("/createAccount", (req, res) => {
                 newShopper.save((error3, results3) => {});
             });
             // send bcrypt value of password to client to store as login token
-            res.send(bcrypt_value);
         } else {
-            // send null instead of bcrypt value to client if this login is being used by another account
-            res.send(null);
+            response.bcryptValue = null;
         }
+        // send bcrypt value of password to client to store as login token
+        // send null instead of bcrypt value to client if this login is being used by another account
+        res.json(response);
     });
 });
 
@@ -45,15 +46,15 @@ router.put("/login", (req, res) => {
     let userName = req.body.username;
     let passWord = req.body.password;
 
+    let response = {bcryptValue: null};
     Login.findOne({username: userName, password: passWord}, (err, shopperLogin) => {
         // shopperLogin.length == 0 means that there is no user with this username/password combination 
-        if (shopperLogin.length == 0) {
-            // send null instead of bcrypt value of password
-            res.send(null);
-        } else {
-            // otherwise, a (unique) user exists with this login and we send the user's bcrypt value
-            res.send(shopperLogin.bcryptValue);
+        if (shopperLogin.length != 0) {
+            response.bcryptValue = shopperLogin.bcryptValue;
         }
+        // send null instead of bcrypt value of password
+        // otherwise, a (unique) user exists with this login and we send the user's bcrypt value
+        res.json(response);
     });
 });
 
@@ -63,7 +64,7 @@ const getShopperData = (req, res, desiredProperty) => {
     let bcrypt_value = req.query.bcryptValue;
 
     Shopper.findOne({username: userName, pw_bcrypt: bcrypt_value}).lean().exec((err, data) => {
-        res.send(shopper[desiredProperty]);
+        res.json({desiredProperty: shopper[desiredProperty]});
     });
 }
 
@@ -80,7 +81,7 @@ router.get("/shopper/deleteFromCart", (req, res) => {
         let oldCart = shopper.cart;
         shopper.cart = oldCart.slice(0, indexDelete).concat(oldCart.slice(indexDelete + 1));
         // updatedShopper is the updated version of shopper, and so updatedShopper.cart = newCart
-        shopper.save((err, updatedShopper) => res.send(updatedShopper.cart));
+        shopper.save((err, updatedShopper) => res.json({cart: updatedShopper.cart}));
     });
 });
 
