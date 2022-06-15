@@ -77,15 +77,16 @@ router.get("/shopper/deleteFromCart", (req, res) => {
     let bcrypt_value = req.query.bcryptValue;
     let indexDelete = req.query.indexDelete;
 
-    Shopper.findOne({username: userName, pw_bcrypt: bcrypt_value}).lean().exec((err, data) => {
+    Shopper.findOne({username: userName, pw_bcrypt: bcrypt_value}).lean().exec((err, shopper) => {
         let oldCart = shopper.cart;
         shopper.cart = oldCart.slice(0, indexDelete).concat(oldCart.slice(indexDelete + 1));
+
         // updatedShopper is the updated version of shopper, and so updatedShopper.cart = newCart
         shopper.save((err, updatedShopper) => res.json({cart: updatedShopper.cart}));
     });
 });
 
-// will complete when the purchase page on the client-side is planned out 
+// will complete when the purchase page on the client side is planned out 
 router.get("/shopper/purchase", (req, res) => {
 
 });
