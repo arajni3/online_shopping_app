@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {BrowserRouter, Route, Navigate} from 'react-router-dom';
 import "bootstrap/dist/css/bootstrap.min.css";
-import axiso from "axios";
+import axios from "axios";
 
 // very similar to Login
 function createAccount() {

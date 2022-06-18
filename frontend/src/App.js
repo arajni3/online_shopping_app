@@ -9,7 +9,7 @@ function App() {
 
   const signOut = () => {
     localStorage.removeItem("userName");
-    localStorage.removeItem("bcryptValue");
+    localStorage.removeItem("encryptValue");
     window.location.reload();
   };
 
