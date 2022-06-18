@@ -8,49 +8,39 @@ const saltRounds = 10;
 const router = express.Router();
 
 
-router.put("/createAccount", (req, res) => {
+router.post("/createAccount", (req, res) => {
     let userName = req.body.username;
     let passWord = req.body.password;
-    let bcrypt_value;
 
-    // calculate bcrypt value from password
-    bcrypt.hash(passWord, saltRounds, (err, hash) => {
-        bcrypt_value = hash;
-    });
-
-    let response = {bcryptValue: bcrypt_value};
+    let response = {succeeded: false};
     Shopper.findOne({username: userName, password: passWord}, (err, shopper) => {
         // if shopper is null, then there is currently no user with this login, 
         // otherwise some user is using this login
         if (shopper === null) {
-            let newShopper = new Shopper({username: userName, password: passWord, pw_bcrypt: bcrypt_value, cart: [], purchaseHistory: []});
-            newShopper.save((error2, results2) => {});
-            // send bcrypt value of password to client to store as login token
-        } else {
-            response.bcryptValue = null;
+            let newShopper = new Shopper({username: userName, password: passWord, pw_bcrypt: "", cart: [], purchaseHistory: []});
+            newShopper.save((error2, results2) => {
+                // account creation was successful
+                response.succeeded = true;
+            });
         }
-        // send bcrypt value of password to client to store as login token
-        // send null instead of bcrypt value to client if this login is being used by another account
         res.json(response);
     });
 });
 
-//router.get("/loginStatus", (req, res) => {
-//
-//});
+router.post("/login", (req, res) => {
+    let userName = req.body.userName;
+    let passWord = req.body.passWord;
+    let bcrypt_value = req.body.bcryptValue;
 
-router.put("/login", (req, res) => {
-    let userName = req.body.username;
-    let passWord = req.body.password;
-
-    let response = {bcryptValue: null};
-    Shopper.findOne({username: userName, password: passWord}, (err, shopper) => {
+    let response = {found: false};
+    Shopper.findOneAndUpdate({username: userName, password: passWord}, (err, shopper) => {
         // shopper === null means that there is no user with this username/password combination 
+        // otherwise, update the unique shopper's bcrypt value to the one given by the client,
+        // and set response.found to true 
         if (shopper !== null) {
-            response.bcryptValue = shopper.bcryptValue;
+            shopper.bcryptValue = bcrypt_value;
+            response.found = true;
         }
-        // send null instead of bcrypt value of password
-        // otherwise, a (unique) user exists with this login and we send the user's bcrypt value
         res.json(response);
     });
 });
@@ -60,7 +50,7 @@ const getShopperData = (req, res, desiredProperty) => {
     let userName = req.query.userName;
     let bcrypt_value = req.query.bcryptValue;
 
-    Shopper.findOne({username: userName, pw_bcrypt: bcrypt_value}).lean().exec((err, data) => {
+    Shopper.findOne({username: userName, pw_bcrypt: bcrypt_value}).lean().exec((err, shopper) => {
         res.json({[desiredProperty]: shopper[desiredProperty]});
     });
 }

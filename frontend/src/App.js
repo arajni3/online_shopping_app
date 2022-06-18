@@ -1,24 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import React, {useEffect} from 'react';
+import {BrowserRouter, Routes, Route, Link} from 'react-router-dom';
+import "bootstrap/dist/css/bootstrap.min.css";
+import Login from './components/login.js';
+import CreateAccount from './components/createAccount.js';
 
 function App() {
+  const username = localStorage.getItem("userName");
+
+  const signOut = () => {
+    localStorage.removeItem("userName");
+    localStorage.removeItem("bcryptValue");
+    window.location.reload();
+  };
+
+  useEffect(() => {
+    document.title = "Ashwin's Clothing Store";
+  });
+  
   return (
+    <BrowserRouter>
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <h1>{"Welcome to Ashwin's Clothing Store" + (username ? `, ${username}` : "") + "!"}</h1>
+    <span className="App-header">
+      <Link to="login">Sign in / Start Shopping</Link>
+      <Link to="createAccount">Create an Account</Link>
+      {username && <button onClick={signOut}>Sign Out</button>}
+    </span>
+    <Routes>
+      <Route exact path="login" element={<Login />}></Route>
+      <Route exact path="createAccount" element={<CreateAccount />}></Route>
+    </Routes>
     </div>
+    </BrowserRouter>
   );
 }
 
