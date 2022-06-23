@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {BrowserRouter, Route, Navigate} from 'react-router-dom';
-import signOut from "../helper-functions.signOut.js";
+import signOut from "../helper-functions/signOut.js";
 import Login from "./login.js";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";

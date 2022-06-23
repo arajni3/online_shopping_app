@@ -5,7 +5,7 @@ import ShoppingItem from "./shoppingItem.js";
 import Cart from "./cart.js";
 import PurchaseHistory from "./purchaseHistory.js";
 import Purchase from "./purchase.js";
-import signOut from "../helper-functions.signOut.js";
+import signOut from "../helper-functions/signOut.js";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function Shopping({userName, encryptValue}) {    

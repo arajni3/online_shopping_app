@@ -3,7 +3,7 @@ import {BrowserRouter, Route, Routes, Link} from 'react-router-dom';
 import "bootstrap/dist/css/bootstrap.min.css";
 import Login from './login.js';
 import CreateAccount from './components/createAccount.js';
-import signOut from "../helper-functions.signOut.js";
+import signOut from "../helper-functions/signOut.js";
 
 function Home() {
   let userName = localStorage.getItem("userName");
