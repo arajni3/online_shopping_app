@@ -1,17 +1,19 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {BrowserRouter, Route, Navigate} from 'react-router-dom';
-import bcrypt from "bcrypt";
-import Shopping from "shopping.js";
-import axios from "axios";
+import Shopping from "./shopping.js";
+import axiosInstance from "../httpRequests.js";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-function Login() {
-    const [loggedIn, setLoggedIn] = useState(localStorage.getItem("userName") ? true : false);
+async function Login() {
+    const userNameFromLS = localStorage.getItem("userName");
+
     const [username, setUserName] = useState("");
     const [password, setPassWord] = useState("");
 
     const submittedForm = useRef(false);
-    let encrypt_value;
+    const loggedIn = useRef(false);
+    const afterSuccessMessage= useRef(false);
+    const encrypt_value = useRef("");
 
     async function handleSubmit(event) {
         // prevent default behavior of form submit, which is browser tab refresh
@@ -20,18 +22,22 @@ function Login() {
         submittedForm.current = true;
 
         // send axios post request 
-        let response = await axios.post('/login', {
+        let response = await axiosInstance.post('/login', {
             userName: username,
             passWord: password
         });
 
         // if login was valid, store login token (username with bcrypt value in local storage)
         // and set value of loggedIn to response.found
-        if (response.encryptValue) {
-            encrypt_value = response.encryptValue;
+        if (response.data.encryptValue) {
+            encrypt_value.current = response.data.encryptValue;
             localStorage.setItem("userName", username);
-            localStorage.setItem("encryptValue", encryptValue);
-            setLoggedIn(true);           
+            localStorage.setItem("encryptValue", encrypt_value);
+
+            loggedIn.current = true;
+            setTimeout(() => {
+                afterSuccessMessage.current = true;
+            }, 2000);        
         }
     };
 
@@ -41,20 +47,23 @@ function Login() {
 
     return (
         <BrowserRouter>
-        {(!loggedIn && submittedForm) && <div>Invalid username or password</div>}
+        <div style={{backgroundColor: "rgb(230, 230, 230)"}}>
+        <h1 style={{margin: "auto"}}>Sign in to Your Account</h1>
+        <br />
+        {(!loggedIn.current && submittedForm.current) && <div style={{backgroundColor: "#F08080", fontWeight: "bold", width: "200px", height: "100px", color: "2F4F4F"}}>Invalid username or password</div>}
         <form onSubmit={handleSubmit}>
             <label for="username">Username:</label>
-            <br>
-            </br>
-            <input type="text" id="username" name="username" value={username} onChange={(e) => {setUserName(e.target.value);}} required></input>
+            <br />
+            <input style={{border: "1px solid black"}} type="text" id="username" name="username" value={username} onChange={(e) => {setUserName(e.target.value);}} required />
             <label for="password">Password:</label>
-            <br>
-            </br>
-            <input type="password" id="password" name="password" value={password} onChange = {(e) => {setPassword(e.target.value);}} required></input>
-            <input type="submit" value="Log In"></input>
+            <br />
+            <input style={{border: "1px solid black"}} type="password" id="password" name="password" value={password} onChange = {(e) => {setPassWord(e.target.value);}} required />
+            <input style={{display: "flex", justifyContent: "flex-end"}} className = "btn btn-success" type="submit" value="Log In" />
         </form>
-        <Route path="user/shopping" element={<Shopping userName={username} encryptValue={encrypt_value} />}></Route>
-        {loggedIn && <Navigate to="user/shopping" replace={true} />}
+        {(loggedIn.current && submittedForm.current) && <div style={{backgroundColor: "#7CFC00", fontWeight: "bold", width: "200px", height: "100px", color: "2F4F4F"}}>Sign-in was successful. Redirecting to shopping page...</div>}
+        <Route path="/shopper/shopping" element={<Shopping />}></Route>
+        {(afterSuccessMessage.current || userNameFromLS) && <Navigate to="/shopper/shopping" replace={true} />}
+        </div>
         </BrowserRouter>
     );
 }

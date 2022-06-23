@@ -15,70 +15,138 @@ router.post("/createAccount", (req, res) => {
     Shopper.findOne({username: userName, password: passWord}, (err, shopper) => {
         // if shopper is null, then there is currently no user with this login, 
         // otherwise some user is using this login
-        if (shopper === null) {
+        if (!shopper) {
             let newShopper = new Shopper({username: userName, password: passWord, encryptValue: "", cart: [], purchaseHistory: []});
             newShopper.save((error2, results2) => {
                 // account creation was successful
                 response.succeeded = true;
+                res.json(response);
             });
+        } else {
+            // account creation not successful
+            res.json(response);
         }
     });
-    res.json(response);
 });
 
 router.post("/login", (req, res) => {
     let userName = req.body.userName;
     let passWord = req.body.passWord;
-    let encrypt_value;
+    let encryptValue;
 
-    bcrypt.hash(password, saltRounds, (err, hash) => {
-        encrypt_value = hash;
+    bcrypt.hash(passWord, saltRounds, (err, hash) => {
+        encryptValue = hash;
+        let response = {encryptValue: encryptValue};
+        Shopper.findOne({username: userName, password: passWord}, (err, shopper) => {
+            // shopper === null means that there is no user with this username/password combination 
+            // otherwise, update the unique shopper's bcrypt value to the one given by the client,
+            // and set response.encryptValue to the password's bcrypt value
+            if (shopper) {
+                shopper.encryptValue = encryptValue;
+                shopper.save((err2, updatedShopper) => {
+                    res.json(response);
+                });
+            } else {
+                res.json(response);
+            }
+        });
     });   
+});
 
-    let response = {encryptValue: null};
-    Shopper.findOneAndUpdate({username: userName, password: passWord}, (err, shopper) => {
-        // shopper === null means that there is no user with this username/password combination 
-        // otherwise, update the unique shopper's bcrypt value to the one given by the client,
-        // and set response.encryptValue to the password's bcrypt value
-        if (shopper !== null) {
-            shopper.encryptValue = encrypt_value;
-            response.encryptValue = encrypt_value;
+
+router.get("/shopper/cart", (req, res) => {    
+    let userName = req.query.userName;
+    let encryptValue = req.query.encryptValue;
+
+    let response = {cart: []};
+    Shopper.findOne({username: userName, encryptValue: encryptValue}).lean().exec((err, shopper) => {
+        if (shopper) {
+            response.cart = shopper.cart;
+        }
+        res.json(response);
+    });
+});
+
+router.get("/shopper/purchaseHistory", (req, res) => {
+    let userName = req.query.userName;
+    let encryptValue = req.query.encryptValue;
+
+    let response = {purchaseHistory: []};
+    Shopper.findOne({username: userName, encryptValue: encryptValue}).lean().exec((err, shopper) => {
+        if (shopper) {
+            response.purchaseHistory = shopper.purchaseHistory;
+        }
+        res.json(response);
+    });
+});
+
+router.patch("/shopper/addToCart", (req, res) => {
+    let userName = req.body.userName;
+    let encryptValue = req.body.encryptValue;
+    let type = req.body.type;
+
+    let response = {updatedCart: []};
+    Shopper.findOne({username: userName, encryptValue: encryptValue}, (err, shopper) => {
+        if (shopper) {
+            shopper.cart.push(type);
+            shopper.save((err2, updatedShopper) => {
+                response.updatedCart = updatedShopper.cart;
+                res.json(response);
+            });
+        } else {
+            res.json(response);
         }
     });
-    res.json(response);  
 });
 
-// get desired data from desired mongoose Shopper document specified by client-side request
-const getShopperData = (req, res, desiredProperty) => {
-    let userName = req.query.userName;
-    let encryptValue = req.query.encryptValue;
+router.patch("/shopper/deleteFromCart", (req, res) => {
+    let userName = req.body.userName;
+    let encryptValue = req.body.encryptValue;
+    let type = req.body.type;
 
-    Shopper.findOne({username: userName, encryptValue: encryptValue}).lean().exec((err, shopper) => {
-        res.json({[desiredProperty]: shopper[desiredProperty]});
-    });
-}
-
-router.get("/shopper/cart", (req, res) => {getShopperData(req, res, "cart")});
-
-router.get("/shopper/purchaseHistory", (req, res) => {getShopperData(req, res, "purchaseHistory")});
-
-router.get("/shopper/deleteFromCart", (req, res) => {
-    let userName = req.query.userName;
-    let encryptValue = req.query.encryptValue;
-    let indexDelete = req.query.indexDelete;
-
-    Shopper.findOne({username: userName, encryptValue: encryptValue}).lean().exec((err, shopper) => {
-        let oldCart = shopper.cart;
-        shopper.cart = oldCart.slice(0, indexDelete).concat(oldCart.slice(indexDelete + 1));
-
-        // updatedShopper is the updated version of shopper, and so updatedShopper.cart = newCart
-        shopper.save((err, updatedShopper) => res.json({cart: updatedShopper.cart}));
+    let response = {cart: []};
+    Shopper.findOne({username: userName, encryptValue: encryptValue}, (err, shopper) => {
+        if (shopper) {
+            let oldCart = shopper.cart;
+            let indexDelete;
+    
+            // it is guaranteed that a match will be found
+            for (indexDelete = 0; indexDelete < oldCart.length; ++indexDelete) {
+                if (type === oldCart[indexDelete]) {
+                    break;
+                }
+            }
+            shopper.cart = oldCart.slice(0, indexDelete).concat(oldCart.slice(indexDelete + 1));
+    
+            // save the updated version of the shopper's cart in the response object
+            shopper.save((err2, updatedShopper) => {
+                response.cart = updatedShopper.cart;
+                res.json(response);
+            });
+        } else {
+            res.json(response);
+        }
     });
 });
 
-// will complete when the purchase page on the client side is planned out 
-router.get("/shopper/purchase", (req, res) => {
+router.patch("/shopper/purchase", (req, res) => {
+    let userName = req.body.userName;
+    let encryptValue = req.body.userName;
 
+    Shopper.findOne({username: userName, encryptValue: encryptValue}, (err, shopper) => {
+        if (shopper) {
+            if (shopper.cart.length) {
+                shopper.purchaseHistory.push(shopper.cart);
+            }
+            shopper.cart = [];
+            
+            // save the respective updated versions of the shopper's cart and purchase history
+            // in the response object
+            shopper.save((err2, updatedShopper) => res.json({succeeded: true}));
+        } else {
+            res.json({succeeded: false});
+        }
+    });
 });
 
 

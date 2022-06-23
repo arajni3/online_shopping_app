@@ -9,5 +9,5 @@ const shopperSchema = new mongoose.Schema({
     cart: [String],
     purchaseHistory: [[String]]
 });
-let Shopper = mongoose.Model("Shopper", ShopperSchema);
+let Shopper = mongoose.model("Shopper", shopperSchema);
 export default Shopper;
