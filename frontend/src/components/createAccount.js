@@ -3,7 +3,7 @@ import {BrowserRouter, Route, Navigate} from 'react-router-dom';
 import signOut from "../helper-functions/signOut.js";
 import Login from "./login.js";
 import "bootstrap/dist/css/bootstrap.min.css";
-import axios from "axios";
+import axiosInstance from "../httpRequests.js";
 
 // very similar to Login
 async function createAccount() {
@@ -21,7 +21,7 @@ async function createAccount() {
 
         submittedForm.current = true;
 
-        let response = await axios.post('/createAccount', {
+        let response = await axiosInstance.post('/createAccount', {
             userName: username,
             passWord: password
         });

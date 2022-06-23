@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import {BrowserRouter, Route, Routes, Link} from 'react-router-dom';
 import "bootstrap/dist/css/bootstrap.min.css";
 import Login from './login.js';
-import CreateAccount from './components/createAccount.js';
+import CreateAccount from './createAccount.js';
 import signOut from "../helper-functions/signOut.js";
 
 function Home() {

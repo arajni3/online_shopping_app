@@ -1,8 +1,8 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {BrowserRouter, Navigate} from 'react-router-dom';
-import deleteFromCart from "../helper-functions.deleteFromCart.js";
-import {getShoppingItems, getTotal} from "../helper-functions.otherCartOperations.js";
-import axios from "axios";
+import deleteFromCart from "../helper-functions/deleteFromCart.js";
+import {getShoppingItems, getTotal} from "../helper-functions/otherCartOperations.js";
+import axiosInstance from "../httpRequests.js";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 async function Cart() {
@@ -22,7 +22,7 @@ async function Cart() {
         document.title = "Your Cart";
 
         async function asyncCart() {
-            let updatedCart = (await axios.get("/shopper/cart", {params: {userName: userName, encryptValue: encryptValue}})).data.updatedCart;
+            let updatedCart = (await axiosInstance.get("/shopper/cart", {params: {userName: userName, encryptValue: encryptValue}})).data.updatedCart;
             setCart(updatedCart);
         }
         asyncCart();
