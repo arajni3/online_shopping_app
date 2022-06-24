@@ -1,7 +1,9 @@
 import axios from 'axios';
 
+let url = (process.env.NODE_ENV === "production")? "" : "http://localhost:5000";
+
 export default axios.create({
-    baseURL: "http://localhost:5000/api/v1/shopping",
+    baseURL: url,
     headers: {
         "Content-type": "application/json"
     }
