@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect} from 'react';
 import {BrowserRouter, Navigate} from 'react-router-dom';
 import deleteFromCart from "../helper-functions/deleteFromCart.js";
 import {getShoppingItems, getTotal} from "../helper-functions/otherCartOperations.js";
