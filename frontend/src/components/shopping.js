@@ -9,8 +9,8 @@ import signOut from "../helper-functions/signOut.js";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function Shopping() {    
-    const userName = useRef(localStorage.getItem("userName") || "");
-    const encryptValue = useRef(localStorage.getItem("encryptValue") || "");
+    let userName = useRef(localStorage.getItem("userName") || "");
+    let encryptValue = useRef(localStorage.getItem("encryptValue") || "");
 
     let rows = [];
     for (let i = 0; i < shoppingSelections.length; i += 3) {
