@@ -8,7 +8,7 @@ import Purchase from "./purchase.js";
 import signOut from "../helper-functions/signOut.js";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-function Shopping({userName, encryptValue}) {    
+function Shopping() {    
     const userName = useRef(localStorage.getItem("userName") || "");
     const encryptValue = useRef(localStorage.getItem("encryptValue") || "");
 
