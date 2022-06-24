@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {BrowserRouter, Navigate} from 'react-router-dom';
-import {getShoppingItems, getTotal} from "../helper-functions.otherCartOperations.js";
+import {getShoppingItems, getTotal} from "../helper-functions/otherCartOperations.js";
 import axiosInstance from "../httpRequests.js";
 import "bootstrap/dist/css/bootstrap.min.css";
 
