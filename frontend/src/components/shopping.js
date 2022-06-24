@@ -1,5 +1,5 @@
 import React, {useEffect, useRef} from 'react';
-import {BrowserRouter, Route, Navigate} from 'react-router-dom';
+import {BrowserRouter, Route, Link, Navigate} from 'react-router-dom';
 import shoppingSelections from "../constants/shoppingSelections.js";
 import ShoppingItem from "./shoppingItem.js";
 import Cart from "./cart.js";

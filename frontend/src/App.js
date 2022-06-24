@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {BrowserRouter, Route, Link} from 'react-router-dom';
+import {BrowserRouter, Route, Navigate} from 'react-router-dom';
 import Home from "./components/home.js";
 
 function App() {

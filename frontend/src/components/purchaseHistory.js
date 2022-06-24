@@ -67,7 +67,7 @@ function PurchaseHistory() {
                     })}
                     <div style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
                         <p style={{fontSize: "20px"}}>Total:</p>
-                        <p style={{fontWeight: "bold"}}>${total}</p>
+                        <p style={{fontWeight: "bold"}}>${totalHistory[index]}</p>
                     </div>
                     <br />                    
                     </React.Fragment>

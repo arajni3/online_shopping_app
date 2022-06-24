@@ -20,7 +20,7 @@ export const getShoppingItems = (selections) => {
 export const getTotal = (selectionsObject) => {
     let sum = 0;
     for (const type in selectionsObject) {
-        let selectionObject = obj[type];
+        let selectionObject = selectionsObject[type];
         sum += selectionObject.cost * selectionObject.count;
     }
     return sum;

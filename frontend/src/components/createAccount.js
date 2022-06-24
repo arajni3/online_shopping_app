@@ -6,7 +6,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import axiosInstance from "../httpRequests.js";
 
 // very similar to Login
-function createAccount() {
+function CreateAccount() {
     const [username, setUserName] = useState("");
     const [password, setPassWord] = useState("");
 
@@ -62,4 +62,4 @@ function createAccount() {
     );
 }
 
-export default createAccount;
+export default CreateAccount;
