@@ -4,7 +4,7 @@ import Cart from "./cart.js";
 import axiosInstance from "../httpRequests.js";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-async function Purchase() {
+function Purchase() {
     let userNameFromLS = localStorage.getItem("userName");
 
     const [creditCardNumber, setCreditCardNumber] = useState("");

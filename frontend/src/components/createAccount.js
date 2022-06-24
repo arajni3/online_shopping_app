@@ -6,7 +6,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import axiosInstance from "../httpRequests.js";
 
 // very similar to Login
-async function createAccount() {
+function createAccount() {
     const [username, setUserName] = useState("");
     const [password, setPassWord] = useState("");
 

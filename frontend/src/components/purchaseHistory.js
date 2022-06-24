@@ -4,11 +4,11 @@ import {getShoppingItems, getTotal} from "../helper-functions/otherCartOperation
 import axiosInstance from "../httpRequests.js";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-async function PurchaseHistory() {
+function PurchaseHistory() {
     let userName = localStorage.getItem("userName") || "";
     let encryptValue = localStorage.getItem("encryptValue") || "";
 
-    const purchaseHistory = (await axiosInstance.get("/shopper/cart", {params: {userName: userName, encryptValue: encryptValue}})).data.purchaseHistory;
+    const [purchaseHistory, setPurchaseHistory] = useState([]);
 
     let shoppingItemsHistory = [];
     let totalHistory = [];
@@ -24,7 +24,13 @@ async function PurchaseHistory() {
 
     useEffect(() => {
         document.title = "Your Purchase History";
-    });
+
+        async function getPurchaseHistory() {
+            let asyncInitialPH = (await axiosInstance.get("/shopper/cart", {params: {userName: userName, encryptValue: encryptValue}})).data.purchaseHistory;
+            setPurchaseHistory(asyncInitialPH);
+        }
+        getPurchaseHistory();
+    }, []);
 
     return (
         <BrowserRouter>
@@ -70,7 +76,7 @@ async function PurchaseHistory() {
             <br />
             <div style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
                 <p style={{fontSize: "24px"}}>Overall Total:</p>
-                <p style={{fontWeight: "bold"}}>${overallTotal}</p>
+                <p style={{fontWeight: "bold"}}>${overallSum}</p>
             </div>
             </React.Fragment>
             );

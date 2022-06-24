@@ -4,7 +4,7 @@ import Shopping from "./shopping.js";
 import axiosInstance from "../httpRequests.js";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-async function Login() {
+function Login() {
     const userNameFromLS = localStorage.getItem("userName");
 
     const [username, setUserName] = useState("");

@@ -5,7 +5,7 @@ import {getShoppingItems, getTotal} from "../helper-functions/otherCartOperation
 import axiosInstance from "../httpRequests.js";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-async function Cart() {
+function Cart() {
     const [cart, setCart] = useState([]);
     const userName = localStorage.getItem("userName") || "";
     const encryptValue = localStorage.getItem("encryptValue") || "";
@@ -22,8 +22,8 @@ async function Cart() {
         document.title = "Your Cart";
 
         async function asyncCart() {
-            let updatedCart = (await axiosInstance.get("/shopper/cart", {params: {userName: userName, encryptValue: encryptValue}})).data.updatedCart;
-            setCart(updatedCart);
+            let asyncInitialCart = (await axiosInstance.get("/shopper/cart", {params: {userName: userName, encryptValue: encryptValue}})).data.cart;
+            setCart(asyncInitialCart);
         }
         asyncCart();
     }, []);
