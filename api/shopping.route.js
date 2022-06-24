@@ -1,5 +1,5 @@
 import express from "express";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import Shopper from "./shopper.controller.js";
 
 const saltRounds = 10;
