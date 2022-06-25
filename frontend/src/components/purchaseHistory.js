@@ -26,7 +26,7 @@ function PurchaseHistory() {
         document.title = "Your Purchase History";
 
         async function getPurchaseHistory() {
-            let asyncInitialPH = (await axiosInstance.get("/shopper/cart", {params: {userName: userName, encryptValue: encryptValue}})).data.purchaseHistory;
+            let asyncInitialPH = (await axiosInstance.get("/shopper/purchaseHistory", {params: {userName: userName, encryptValue: encryptValue}})).data.purchaseHistory;
             setPurchaseHistory(asyncInitialPH);
         }
         getPurchaseHistory();

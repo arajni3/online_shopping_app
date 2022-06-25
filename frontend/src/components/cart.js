@@ -22,7 +22,7 @@ function Cart() {
         document.title = "Your Cart";
 
         async function asyncCart() {
-            let asyncInitialCart = (await axiosInstance.get("/cart", {params: {userName: userName, encryptValue: encryptValue}})).data.cart;
+            let asyncInitialCart = (await axiosInstance.get("/shopper/cart", {params: {userName: userName, encryptValue: encryptValue}})).data.cart;
             setCart(asyncInitialCart);
         }
         asyncCart();
