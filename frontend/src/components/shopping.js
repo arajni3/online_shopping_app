@@ -23,7 +23,7 @@ function Shopping() {
 
     const handleSignOut = () => {
         signOut();
-        userName = "";
+        userName.current = "";
     };
 
     useEffect(() => {
