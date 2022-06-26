@@ -1,13 +1,15 @@
 import React from 'react';
-import {BrowserRouter, Route, Navigate} from 'react-router-dom';
+import {Route, Routes, Navigate} from 'react-router-dom';
 import Home from "./components/home.js";
 
 function App() {
   return (
-    <BrowserRouter>
+    <>
+    <Routes>
     <Route path="/" element={<Home />} />
+    </Routes>
     <Navigate to="/" replace={true} />
-    </BrowserRouter>
+    </>
   );
 }
 

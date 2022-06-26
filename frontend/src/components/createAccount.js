@@ -1,7 +1,6 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {BrowserRouter, Route, Navigate} from 'react-router-dom';
+import {Navigate} from 'react-router-dom';
 import signOut from "../helper-functions/signOut.js";
-import Login from "./login.js";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axiosInstance from "../httpRequests.js";
 
@@ -37,12 +36,12 @@ function CreateAccount() {
 
     useEffect(() => {
         document.title = "Create Account";
+        document.body.style.backgroundColor = "rgb(230, 230, 230, 230)";
     }, []);
 
     return (
-        <BrowserRouter>
-        <div style={{backgroundColor: "rgb(230, 230, 230)"}}>
-        <h1 style={{margin: "auto"}}>Create an Account</h1>
+        <>
+        <h1 style={{textAlign: "center"}}>Create an Account</h1>
         <br />
         {(!succeeded && submittedForm) && <div style={{backgroundColor: "#F08080", fontWeight: "bold", width: "200px", height: "100px", color: "2F4F4F"}}>Invalid username or password.</div>}
         <form onSubmit={handleSubmit}>
@@ -55,10 +54,8 @@ function CreateAccount() {
             <input style={{display: "flex", justifyContent: "flex-end"}} className = "btn btn-success" type="submit" value="Create" />
         </form>
         {succeeded && <div style={{backgroundColor: "#7CFC00", fontWeight: "bold", width: "200px", height: "100px", color: "2F4F4F"}}>Account creation was successful. Redirecting to login page...</div>}
-        <Route path="/login" element={<Login />}></Route>
         {afterSuccessMessage && <Navigate to="/login"/>}
-        </div>
-        </BrowserRouter>
+        </v>
     );
 }
 

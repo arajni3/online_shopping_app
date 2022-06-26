@@ -1,5 +1,5 @@
 import React, {useEffect, useRef} from 'react';
-import {BrowserRouter, Route, Link, Navigate} from 'react-router-dom';
+import {Route, Link, Routes, Navigate} from 'react-router-dom';
 import shoppingSelections from "../constants/shoppingSelections.js";
 import ShoppingItem from "./shoppingItem.js";
 import Cart from "./cart.js";
@@ -28,23 +28,25 @@ function Shopping() {
 
     useEffect(() => {
         document.title = "Shopping";
+        document.body.style.backgroundColor = "rgb(230, 230, 230, 230)";
     });
 
     return (
-        <BrowserRouter>
-        <div style={{backgroundColor: "rgb(230, 230, 230)"}}>
-        <Route exact path="/shopper/cart" element={<Cart />}></Route>
-        <Route exact path="/shopper/purchaseHistory" element={<PurchaseHistory />}></Route>
-        <Route exact path="/shopper/purchase" element={<Purchase />} />
+        <>
+        <Routes>
+        <Route path="/shopper/cart" element={<Cart />}></Route>
+        <Route path="/shopper/purchaseHistory" element={<PurchaseHistory />}></Route>
+        <Route path="/shopper/purchase" element={<Purchase />}></Route>
+        </Routes>
         {!userName.current && <Navigate to="/" replace={true} />}
         <nav className="navbar" style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
             <Link to="/" className="btn btn-light" style={{fontSize: "20px"}}>Ashwin's Clothing Store</Link>
-            <Link to="/shopper/cart" style={{color: "#800000"}}>My Cart</Link>
-            <Link to="/shopper/purchaseHistory"style={{color: "#800000"}}>My Purchase History</Link>
+            <Route exact path="/shopper/cart" element={<Cart />}><Link to="/shopper/cart" style={{color: "#800000"}}>My Cart</Link></Route>
+            <Route exact path="/shopper/purchaseHistory" element={<PurchaseHistory />}><Link to="/shopper/purchaseHistory"style={{color: "#800000"}}>My Purchase History</Link></Route>
             <button onClick={handleSignOut}style={{color: "#800000"}}>Sign Out</button>
         </nav>
         <br />
-        <h1 style={{margin: "auto"}}>View and Select from Our Selections!</h1>
+        <h1 style={{textAlign: "center"}}>View and Select from Our Selections!</h1>
         <br />  
         {rows.map((row, index) => {
             return (
@@ -57,10 +59,9 @@ function Shopping() {
             );
         })}
         <div style={{display: "flex", justifyContent: "flex-end"}}>
-        <Link className="btn btn-success" to="/shopper/purchase">Make Purchase</Link>
+        <Route exact path="/shopper/purchase" element={<Purchase />}><Link className="btn btn-success" to="/shopper/purchase">Make Purchase</Link></Route>
         </div>
-        </div>
-        </BrowserRouter>
+        </>
     );
 }
 

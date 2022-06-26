@@ -1,11 +1,11 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {BrowserRouter, Route, Navigate} from 'react-router-dom';
+import {Route, Routes, Navigate} from 'react-router-dom';
 import Shopping from "./shopping.js";
 import axiosInstance from "../httpRequests.js";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function Login() {
-    const userNameFromLS = localStorage.getItem("userName");
+    const userNameFromLS = useRef(localStorage.getItem("userName"));
 
     const [username, setUserName] = useState("");
     const [password, setPassWord] = useState("");
@@ -43,12 +43,15 @@ function Login() {
 
     useEffect(() => {
         document.title = "Sign In / Start Shopping";
+        document.body.style.backgroundColor = "rgb(230, 230, 230, 230)";
     }, []);
 
     return (
-        <BrowserRouter>
-        <div style={{backgroundColor: "rgb(230, 230, 230)"}}>
-        <h1 style={{margin: "auto"}}>Sign in to Your Account</h1>
+        <>
+        <Routes>
+        <Route path="/shopper/shopping" element={<Shopping />}></Route>
+        </Routes>
+        <h1 style={{textAlign: "center"}}>Sign in to Your Account</h1>
         <br />
         {(!loggedIn.current && submittedForm.current) && <div style={{backgroundColor: "#F08080", fontWeight: "bold", width: "200px", height: "100px", color: "2F4F4F"}}>Invalid username or password</div>}
         <form onSubmit={handleSubmit}>
@@ -61,10 +64,8 @@ function Login() {
             <input style={{display: "flex", justifyContent: "flex-end"}} className = "btn btn-success" type="submit" value="Log In" />
         </form>
         {(loggedIn.current && submittedForm.current) && <div style={{backgroundColor: "#7CFC00", fontWeight: "bold", width: "200px", height: "100px", color: "2F4F4F"}}>Sign-in was successful. Redirecting to shopping page...</div>}
-        <Route path="/shopper/shopping" element={<Shopping />}></Route>
-        {(afterSuccessMessage.current || userNameFromLS) && <Navigate to="/shopper/shopping" replace={true} />}
-        </div>
-        </BrowserRouter>
+        {(afterSuccessMessage.current || userNameFromLS.current) && <Navigate to="/shopper/shopping" replace={true} />}
+        </>
     );
 }
 

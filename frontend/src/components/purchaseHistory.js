@@ -1,12 +1,12 @@
-import React, {useState, useEffect} from 'react';
-import {BrowserRouter, Navigate} from 'react-router-dom';
+import React, {useState, useEffect, useRef} from 'react';
+import {Navigate} from 'react-router-dom';
 import {getShoppingItems, getTotal} from "../helper-functions/otherCartOperations.js";
 import axiosInstance from "../httpRequests.js";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function PurchaseHistory() {
-    let userName = localStorage.getItem("userName") || "";
-    let encryptValue = localStorage.getItem("encryptValue") || "";
+    let userName = useRef(localStorage.getItem("userName") || "");
+    let encryptValue = useRef(localStorage.getItem("encryptValue") || "");
 
     const [purchaseHistory, setPurchaseHistory] = useState([]);
 
@@ -24,19 +24,19 @@ function PurchaseHistory() {
 
     useEffect(() => {
         document.title = "Your Purchase History";
+        document.body.style.backgroundColor = "rgb(230, 230, 230, 230)";
 
         async function getPurchaseHistory() {
-            let asyncInitialPH = (await axiosInstance.get("/shopper/purchaseHistory", {params: {userName: userName, encryptValue: encryptValue}})).data.purchaseHistory;
+            let asyncInitialPH = (await axiosInstance.get("/shopper/purchaseHistory", {params: {userName: userName.current, encryptValue: encryptValue.current}})).data.purchaseHistory;
             setPurchaseHistory(asyncInitialPH);
         }
         getPurchaseHistory();
     }, []);
 
     return (
-        <BrowserRouter>
-        {!userName && <Navigate to="/" replace={true} />}
-        <div style={{backgroundColor: "rgb(230, 230, 230)"}}>
-        <h1 style={{margin: "auto"}}>Your Purchase History</h1>
+        <>
+        {!userName.current && <Navigate to="/" replace={true} />}
+        <h1 style={{textAlign: "center"}}>Your Purchase History</h1>
         <br />
         <div style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
                 <p>Item</p>
@@ -81,8 +81,7 @@ function PurchaseHistory() {
             </React.Fragment>
             );
         })}
-        </div>
-        </BrowserRouter>
+        </>
     );
 }
 

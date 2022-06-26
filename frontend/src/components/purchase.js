@@ -1,11 +1,10 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {BrowserRouter, Route, Link, Navigate} from 'react-router-dom';
-import Cart from "./cart.js";
+import {Link, Navigate} from 'react-router-dom';
 import axiosInstance from "../httpRequests.js";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function Purchase() {
-    let userNameFromLS = localStorage.getItem("userName");
+    let userNameFromLS = useRef(localStorage.getItem("userName"));
 
     const [creditCardNumber, setCreditCardNumber] = useState("");
     const [expirationDate, setExpirationDate] = useState("");
@@ -27,7 +26,7 @@ function Purchase() {
         submittedForm.current = true;
 
         let response = await axiosInstance.patch("/shopper/purchase", {
-            userName: userNameFromLS, 
+            userName: userNameFromLS.current, 
             encryptValue: localStorage.getItem("encryptValue")
         });
 
@@ -42,17 +41,16 @@ function Purchase() {
 
     useEffect(() => {
         document.title = "Make a Purchase";
+        document.body.style.backgroundColor = "rgb(230, 230, 230, 230)";
     }, []);
 
     return (
-        <BrowserRouter>
-        {!userNameFromLS && <Navigate to="/" replace={true} />}
-        <div style={{backgroundColor: "rgb(230, 230, 230)"}}></div>
-        <h1 style={{margin: "auto"}}>Make a Purchase</h1>
+        <>
+        {!userNameFromLS.current && <Navigate to="/" replace={true} />}
+        <h1 style={{textAlign: "center"}}>Make a Purchase</h1>
         <br />
         {(!purchaseSucceeded.current && submittedForm.current) && <div style={{backgroundColor: "#F08080", fontWeight: "bold", width: "200px", height: "100px", color: "2F4F4F"}}>Invalid username or password</div>}
-        <Route exact path="/shopper/cart" element={<Cart />}></Route>
-        <Link to="/shopper/cart" style={{color: "#800000", margin: "auto"}} target="_blank">View Your Cart</Link>
+        <Link to="/shopper/cart" style={{color: "#800000", textAlign: "center"}} target="_blank">View Your Cart</Link>
         <form onSubmit={handleSubmit}>
             <h2>Credit Card Information</h2>
             <div style={{backgroundColor: "rgb(190, 190, 190)"}}>
@@ -87,7 +85,7 @@ function Purchase() {
         </form>
         {(purchaseSucceeded.current && submittedForm.current) && <div style={{backgroundColor: "#7CFC00", fontWeight: "bold", width: "200px", height: "100px", color: "2F4F4F"}}>Purchase was successful. Going back to shopping page...</div>}
         {afterSuccessMessage.current && <Navigate to="/shopper/shopping" replace={true} />}
-        </BrowserRouter>
+        </>
     );
 }
 

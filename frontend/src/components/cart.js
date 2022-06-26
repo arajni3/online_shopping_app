@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import {BrowserRouter, Navigate} from 'react-router-dom';
+import React, {useState, useEffect, useRef} from 'react';
+import {Navigate} from 'react-router-dom';
 import deleteFromCart from "../helper-functions/deleteFromCart.js";
 import {getShoppingItems, getTotal} from "../helper-functions/otherCartOperations.js";
 import axiosInstance from "../httpRequests.js";
@@ -7,8 +7,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 function Cart() {
     const [cart, setCart] = useState([]);
-    const userName = localStorage.getItem("userName") || "";
-    const encryptValue = localStorage.getItem("encryptValue") || "";
+    const userName = useRef(localStorage.getItem("userName") || "");
+    const encryptValue = useRef(localStorage.getItem("encryptValue") || "");
 
     let shoppingItems = getShoppingItems(cart);
     let total = getTotal(shoppingItems);
@@ -20,19 +20,20 @@ function Cart() {
 
     useEffect(() => {
         document.title = "Your Cart";
+        document.body.style.backgroundColor = "rgb(230, 230, 230, 230)";
 
         async function asyncCart() {
-            let asyncInitialCart = (await axiosInstance.get("/shopper/cart", {params: {userName: userName, encryptValue: encryptValue}})).data.cart;
+            let asyncInitialCart = (await axiosInstance.get("/shopper/cart", {params: {userName: userName.current, encryptValue: encryptValue.current}})).data.cart;
             setCart(asyncInitialCart);
         }
         asyncCart();
     }, []);
 
     return (
-        <BrowserRouter>
-        {!userName && <Navigate to="/" replace={true} />}
-        <div style={{backgroundColor: "rgb(230, 230, 230)"}}>
-            <h1 style={{margin: "auto"}}>Your Cart</h1>
+        <>
+        {!userName.current && <Navigate to="/" replace={true} />}
+        <>
+            <h1 style={{textAlign: "center"}}>Your Cart</h1>
             <br />
             <div style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
                 <p>Item</p>
@@ -68,8 +69,8 @@ function Cart() {
                 <div></div>
                 <p style={{fontWeight: "bold"}}>${total}</p>
             </div>
-        </div>
-        </BrowserRouter>
+        </>
+        </>
     )
 }
 
