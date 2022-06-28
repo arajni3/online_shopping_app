@@ -1,11 +1,11 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {Navigate} from 'react-router-dom';
-import deleteFromCart from "../helper-functions/deleteFromCart.js";
+import {useNavigate} from 'react-router-dom';
 import {getShoppingItems, getTotal} from "../helper-functions/otherCartOperations.js";
 import axiosInstance from "../httpRequests.js";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function Cart() {
+    const navigate = useNavigate();
     const [cart, setCart] = useState([]);
     const userName = useRef(localStorage.getItem("userName") || "");
     const encryptValue = useRef(localStorage.getItem("encryptValue") || "");
@@ -13,8 +13,17 @@ function Cart() {
     let shoppingItems = getShoppingItems(cart);
     let total = getTotal(shoppingItems);
 
+    // add the shopping selection (represented by its src) to the shopper's cart
+    function deleteFromCart(type, username, encryptvalue) {
+        return axiosInstance.patch('/shopper/deleteFromCart', {
+            userName: username,
+            encryptValue: encryptvalue,
+            type: type
+        });
+    }
+
     async function handleDelete(type) {
-        let updatedCart = (await deleteFromCart(type, userName, encryptValue)).data.updatedCart;
+        let updatedCart = (await deleteFromCart(type, userName.current, encryptValue.current)).data.updatedCart;
         setCart(updatedCart);
     }
 
@@ -22,16 +31,18 @@ function Cart() {
         document.title = "Your Cart";
         document.body.style.backgroundColor = "rgb(230, 230, 230, 230)";
 
-        async function asyncCart() {
-            let asyncInitialCart = (await axiosInstance.get("/shopper/cart", {params: {userName: userName.current, encryptValue: encryptValue.current}})).data.cart;
-            setCart(asyncInitialCart);
+        if (!userName.current) {
+            navigate("/", {replace: true});
+        } else {
+            async function getCart() {
+                let asyncInitialCart = (await axiosInstance.get("/shopper/cart", {params: {userName: userName.current, encryptValue: encryptValue.current}})).data.cart;
+                setCart(asyncInitialCart);
+            }
+            getCart();
         }
-        asyncCart();
     }, []);
 
     return (
-        <>
-        {!userName.current && <Navigate to="/" replace={true} />}
         <>
             <h1 style={{textAlign: "center"}}>Your Cart</h1>
             <br />
@@ -41,10 +52,10 @@ function Cart() {
                 <div></div>
             </div>
             <br />
-            {Object.keys(shoppingItems).map((type, idx) => {
+            {Object.keys(shoppingItems).map((type) => {
                 let selectionObject = shoppingItems[type];
                 let arrayForType = [];
-                let objNoCount = selectionObject;
+                let objNoCount = JSON.parse(JSON.stringify(selectionObject));
                 delete objNoCount.count;
                 for (let i = 0; i < selectionObject.count; ++i) {
                     arrayForType.push(objNoCount);
@@ -64,12 +75,11 @@ function Cart() {
                 );
             })}
             <br />
-            <div style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
+            <div style={{display: "flex", justifyContent: "space-between", alignItems: "center", fontWeight: "bold"}}>
                 <p style={{fontSize: "20px"}}>Total:</p>
+                <p>${total}</p>
                 <div></div>
-                <p style={{fontWeight: "bold"}}>${total}</p>
             </div>
-        </>
         </>
     )
 }

@@ -1,9 +1,10 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {Link, Navigate} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import axiosInstance from "../httpRequests.js";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function Purchase() {
+    const navigate = useNavigate();
     let userNameFromLS = useRef(localStorage.getItem("userName"));
 
     const [creditCardNumber, setCreditCardNumber] = useState("");
@@ -18,25 +19,24 @@ function Purchase() {
 
     const submittedForm = useRef(false);
     const purchaseSucceeded = useRef(false);
-    const afterSuccessMessage= useRef(false);
+    const [afterSuccessMessage, setAfterSuccessMessage] = useState(false);
 
     async function handleSubmit(event) {
         event.preventDefault();
-
-        submittedForm.current = true;
 
         let response = await axiosInstance.patch("/shopper/purchase", {
             userName: userNameFromLS.current, 
             encryptValue: localStorage.getItem("encryptValue")
         });
-
         if (response.data.succeeded) {
+            submittedForm.current = true;
             purchaseSucceeded.current = true;
             setTimeout(() => {
-                afterSuccessMessage.current = true;
+                setAfterSuccessMessage(true);
             }, 2000); 
+        } else {
+            submittedForm.current = true;
         }
-
     }
 
     useEffect(() => {
@@ -44,47 +44,81 @@ function Purchase() {
         document.body.style.backgroundColor = "rgb(230, 230, 230, 230)";
     }, []);
 
+    useEffect(() => {
+        if (afterSuccessMessage) {
+            navigate("../shopping", {replace: true});
+        } else if (!userNameFromLS.current) {
+            navigate("/", {replace: true});
+        }
+    }, [afterSuccessMessage]);
+
     return (
         <>
-        {!userNameFromLS.current && <Navigate to="/" replace={true} />}
         <h1 style={{textAlign: "center"}}>Make a Purchase</h1>
         <br />
-        {(!purchaseSucceeded.current && submittedForm.current) && <div style={{backgroundColor: "#F08080", fontWeight: "bold", width: "200px", height: "100px", color: "2F4F4F"}}>Invalid username or password</div>}
-        <Link to="/shopper/cart" style={{color: "#800000", textAlign: "center"}} target="_blank">View Your Cart</Link>
+        <br />
+        {(!purchaseSucceeded.current && submittedForm.current) && <div style={{backgroundColor: "#F08080", fontWeight: "bold", width: "200px", height: "100px", color: "2F4F4F", display: "block", margin: "0 auto", textAlign: "center"}}>Purchase cannot be made. Your cart is empty. Please go back to the shopping page and add to your cart.</div>}
+        <br />
+        <br />
+        <Link className="btn" to="../shopping/cart" style={{backgroundColor: "#800000", color: "#FFFFFF", display: "block", margin: "0 auto", width: "fit-content"}}>View Your Cart</Link>
+        <br />
+        <br />
         <form onSubmit={handleSubmit}>
             <h2>Credit Card Information</h2>
             <div style={{backgroundColor: "rgb(190, 190, 190)"}}>
                 <br />
-                <label for="creditCardNumber">Credit Card Number:</label>
+                <label htmlFor="creditCardNumber">Credit Card Number:</label>
                 <br />
                 <input style={{border: "1px solid black"}} type="text" id="creditCardNumber" name="creditCardNumber" value={creditCardNumber} onChange={(e) => {setCreditCardNumber(e.target.value);}} required />
-                <label for="expirationDate">Expiration Date (MM/YYYY):</label>
+                <br />
+                <label htmlFor="expirationDate">Expiration Date (MM/YYYY):</label>
+                <br />
                 <input style={{border: "1px solid black"}} type="text" id="expirationDate" name="expirationDate" value={expirationDate} onChange={(e) => {setExpirationDate(e.target.value);}} required />
-                <label for="securityCode">Security Code:</label>
+                <br />
+                <label htmlFor="securityCode">Security Code:</label>
+                <br />
                 <input style={{border: "1px solid black"}} type="text" id="securityCode" name="securityCode" value={securityCode} onChange={(e) => {setSecurityCode(e.target.value);}} required />
                 <br />
+                <br />
             </div>
+            <br />
+            <h2>Billing Address Information</h2>
             <div style={{backgroundColor: "rgb(190, 190, 190)"}}>
                 <br />
-                <label for="name">Name:</label>
+                <label htmlFor="name">Name:</label>
                 <br />
                 <input style={{border: "1px solid black"}} type="text" id="name" name="name" value={name} onChange={(e) => {setName(e.target.value);}} required />
-                <label for="address">Address:</label>
+                <br />
+                <label htmlFor="address">Address:</label>
+                <br />
                 <input style={{border: "1px solid black"}} type="text" id="address" name="address" value={address} onChange={(e) => {setAddress(e.target.value);}} required />
-                <label for="country">Country:</label>
+                <br />
+                <label htmlFor="country">Country:</label>
+                <br />
                 <input style={{border: "1px solid black"}} type="text" id="country" name="country" value={country} onChange={(e) => {setCountry(e.target.value);}} required />
-                <label for="city">City:</label>
+                <br />
+                <label htmlFor="city">City:</label>
+                <br />
                 <input style={{border: "1px solid black"}} type="text" id="city" name="city" value={city} onChange={(e) => {setCity(e.target.value);}} required />
-                <label for="stateOrProvince">State/Province:</label>
+                <br />
+                <label htmlFor="stateOrProvince">State/Province:</label>
+                <br />
                 <input style={{border: "1px solid black"}} type="text" id="stateOrProvince" name="stateOrProvince" value={stateOrProvince} onChange={(e) => {setStateOrProvince(e.target.value);}} required />
-                <label for="postalCode">Postal Code:</label>
+                <br />
+                <label htmlFor="postalCode">Postal Code:</label>
+                <br />
                 <input style={{border: "1px solid black"}} type="text" id="postalCode" name="postalCode" value={postalCode} onChange={(e) => {setPostalCode(e.target.value);}} required />
                 <br />
+                <br />
             </div>
-            <input style={{display: "flex", justifyContent: "flex-end"}} className = "btn btn-success" type="submit" value="Complete Purchase" />
+            <br />
+            <br />
+            <input style={{display: "flex", justifyContent: "flex-end", margin: "auto"}} className = "btn btn-success" type="submit" value="Complete Purchase" />
         </form>
-        {(purchaseSucceeded.current && submittedForm.current) && <div style={{backgroundColor: "#7CFC00", fontWeight: "bold", width: "200px", height: "100px", color: "2F4F4F"}}>Purchase was successful. Going back to shopping page...</div>}
-        {afterSuccessMessage.current && <Navigate to="/shopper/shopping" replace={true} />}
+        <br />
+        <br />
+        <br />
+        {(purchaseSucceeded.current && submittedForm.current) && <div style={{backgroundColor: "#7CFC00", fontWeight: "bold", width: "200px", height: "100px", color: "2F4F4F", display: "flex", justifyContent: "center", alignItems: "center", margin: "auto"}}>Purchase was successful. Going back to shopping page...</div>}
         </>
     );
 }

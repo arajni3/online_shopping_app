@@ -1,24 +1,23 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {Navigate} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import signOut from "../helper-functions/signOut.js";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axiosInstance from "../httpRequests.js";
 
 // very similar to Login
 function CreateAccount() {
+    const navigate = useNavigate();
     const [username, setUserName] = useState("");
     const [password, setPassWord] = useState("");
 
     const submittedForm = useRef(false);
     const succeeded = useRef(false);
-    const afterSuccessMessage = useRef(false);
+    const [afterSuccessMessage, setAfterSuccessMessage] = useState(false);
 
     async function handleSubmit(event) {
         event.preventDefault();
 
         signOut();
-
-        submittedForm.current = true;
 
         let response = await axiosInstance.post('/createAccount', {
             userName: username,
@@ -27,10 +26,13 @@ function CreateAccount() {
 
         // display success message for 2 seconds before redirecting to login page
         if (response.data.succeeded) {
+            submittedForm.current = true;
             succeeded.current = true;
             setTimeout(() => {
-                afterSuccessMessage.current = true;
+                setAfterSuccessMessage(true);
             }, 2000);
+        } else {
+            submittedForm.current = true;
         }
     }
 
@@ -39,23 +41,41 @@ function CreateAccount() {
         document.body.style.backgroundColor = "rgb(230, 230, 230, 230)";
     }, []);
 
+    useEffect(() => {
+        if (afterSuccessMessage) {
+            navigate("../login");
+        }
+    }, [afterSuccessMessage]);
+
     return (
         <>
         <h1 style={{textAlign: "center"}}>Create an Account</h1>
         <br />
-        {(!succeeded && submittedForm) && <div style={{backgroundColor: "#F08080", fontWeight: "bold", width: "200px", height: "100px", color: "2F4F4F"}}>Invalid username or password.</div>}
+        <br />
+        <br />
+        {(!succeeded.current && submittedForm.current) && <div style={{backgroundColor: "#F08080", fontWeight: "bold", width: "200px", height: "100px", color: "2F4F4F", display: "block", margin: "0 auto", textAlign: "center"}}>Invalid username or password.</div>}
+        <br />
+        <br />
+        <br />
         <form onSubmit={handleSubmit}>
-            <label for="username">Username:</label>
+            <div style={{textAlign: "center"}}>
+            <label htmlFor="username">Username:</label>
             <br />
             <input style={{border: "1px solid black"}} type="text" id="username" name="username" value={username} onChange={(e) => {setUserName(e.target.value);}} required />
-            <label for="password">Password:</label>
+            <br />
+            <label htmlFor="password">Password:</label>
             <br />
             <input style={{border: "1px solid black"}} type="password" id="password" name="password" value={password} onChange = {(e) => {setPassWord(e.target.value);}} required />
-            <input style={{display: "flex", justifyContent: "flex-end"}} className = "btn btn-success" type="submit" value="Create" />
+            <br />
+            <br />
+            <input style={{display: "flex", justifyContent: "flex-end", textAlign: "center", margin: "auto"}} className = "btn btn-success" type="submit" value="Create" />
+            </div>
         </form>
-        {succeeded && <div style={{backgroundColor: "#7CFC00", fontWeight: "bold", width: "200px", height: "100px", color: "2F4F4F"}}>Account creation was successful. Redirecting to login page...</div>}
-        {afterSuccessMessage && <Navigate to="/login"/>}
-        </v>
+        <br />
+        <br />
+        <br />
+        {succeeded.current && <div style={{backgroundColor: "#7CFC00", fontWeight: "bold", width: "200px", height: "100px", color: "2F4F4F", display: "flex", justifyContent: "center", alignItems: "center", margin: "auto"}}>Account creation was successful. Redirecting to login page...</div>}
+        </>
     );
 }
 

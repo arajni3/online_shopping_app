@@ -8,8 +8,8 @@ const router = express.Router();
 
 
 router.post("/createAccount", (req, res) => {
-    let userName = req.body.username;
-    let passWord = req.body.password;
+    let userName = req.body.userName;
+    let passWord = req.body.passWord;
 
     let response = {succeeded: false};
     Shopper.findOne({username: userName, password: passWord}, (err, shopper) => {
@@ -36,13 +36,14 @@ router.post("/login", (req, res) => {
 
     bcrypt.hash(passWord, saltRounds, (err, hash) => {
         encryptValue = hash;
-        let response = {encryptValue: encryptValue};
+        let response = {encryptValue: ""};
         Shopper.findOne({username: userName, password: passWord}, (err, shopper) => {
             // shopper === null means that there is no user with this username/password combination 
-            // otherwise, update the unique shopper's bcrypt value to the one given by the client,
-            // and set response.encryptValue to the password's bcrypt value
+            // otherwise, update the unique shopper's bcrypt value to the new bcrypt value
+            // and the response's encrypt value to the new bcrypt value
             if (shopper) {
                 shopper.encryptValue = encryptValue;
+                response.encryptValue = encryptValue;
                 shopper.save((err2, updatedShopper) => {
                     res.json(response);
                 });
@@ -84,7 +85,6 @@ router.patch("/shopper/addToCart", (req, res) => {
     let userName = req.body.userName;
     let encryptValue = req.body.encryptValue;
     let type = req.body.type;
-
     let response = {updatedCart: []};
     Shopper.findOne({username: userName, encryptValue: encryptValue}, (err, shopper) => {
         if (shopper) {
@@ -104,7 +104,7 @@ router.patch("/shopper/deleteFromCart", (req, res) => {
     let encryptValue = req.body.encryptValue;
     let type = req.body.type;
 
-    let response = {cart: []};
+    let response = {updatedCart: []};
     Shopper.findOne({username: userName, encryptValue: encryptValue}, (err, shopper) => {
         if (shopper) {
             let oldCart = shopper.cart;
@@ -120,7 +120,7 @@ router.patch("/shopper/deleteFromCart", (req, res) => {
     
             // save the updated version of the shopper's cart in the response object
             shopper.save((err2, updatedShopper) => {
-                response.cart = updatedShopper.cart;
+                response.updatedCart = updatedShopper.cart;
                 res.json(response);
             });
         } else {
@@ -131,13 +131,11 @@ router.patch("/shopper/deleteFromCart", (req, res) => {
 
 router.patch("/shopper/purchase", (req, res) => {
     let userName = req.body.userName;
-    let encryptValue = req.body.userName;
+    let encryptValue = req.body.encryptValue;
 
     Shopper.findOne({username: userName, encryptValue: encryptValue}, (err, shopper) => {
-        if (shopper) {
-            if (shopper.cart.length) {
-                shopper.purchaseHistory.push(shopper.cart);
-            }
+        if (shopper && shopper.cart.length) {
+            shopper.purchaseHistory.push(shopper.cart);
             shopper.cart = [];
             
             // save the respective updated versions of the shopper's cart and purchase history
