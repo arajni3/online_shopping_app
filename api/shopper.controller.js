@@ -1,4 +1,3 @@
-import mongodb from "mongodb";
 import mongoose from "mongoose";
 
 // encryptValue is the most recent bcrypt value of the shopper's password
