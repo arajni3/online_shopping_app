@@ -2,7 +2,10 @@ import express from 'express';
 import cors from 'cors';
 import shopping from './api/shopping.route.js';
 import * as path from "path";
+import {fileURLToPath} from 'url';
 const app = express();
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 app.use(cors());
 app.use(express.json());
