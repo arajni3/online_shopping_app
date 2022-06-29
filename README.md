@@ -16,6 +16,6 @@ React Components:
 * **PurchaseHistory**: The purchase history page. Displays the shopper's purchase history including the total amount of money spent by the shopper on all purchases.
 * **Purchase**: The page to make a purchase. Includes basic credit card and billing address information fields to fill out in order for the purchase to go through. Empty purchases cannot be made. Upon successful purchase, the app displays a success message and then navigates back to the shopping page.
 
-In all the React components except for App, Home, CreateAccount, and Login, the app immediately upon access navigates the shopper back to the home page if the user tries to access those component pages without being signed into an account.
+In all the React component pages except for App, Home, CreateAccount, and Login, the app immediately upon page access navigates the shopper back to the home page if the user tries to access those component pages without being signed into an account.
 
 The server creation and MongoDB connection are both done in index.js. All Axios HTTP requests are handled by the router created in shopping.route.js, which is used in server.js. The creation of the endpoint for the router as well as the connection from the client to the server are both done in server.js, which is used in index.js.
