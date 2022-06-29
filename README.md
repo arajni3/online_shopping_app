@@ -7,8 +7,7 @@ This web app incorporates the full stack, not just the front end or the back end
 
 Tech Stack and Frameworks:
 
-The backend is implemented using Node and Express to implement the server and its route handlers, Bcrypt for password encryption, Mongoose
-to connect to and utilize MongoDB as a database for storing shopper information in JSON format, and localStorage for storing the shopper's login token. The frontend is implemented using React for the UI and client-side state management, React Router for navigating between components on webpages, vanilla CSS for ordinary CSS styling, Bootstrap for easy button and webpage link CSS styling, Flexbox for CSS layouts, and Axios for sending HTTP requests to the server (specifically, by making XMLHttpRequests). Hence this app is also a MERN (Mongoose, Express, React, Node) stack app.
+The backend is implemented using Node and Express to create the server and its route handlers, Bcrypt to encrypt passwords, and Mongoose to connect to and utilize MongoDB as a database to store shopper information in JSON format. The frontend is implemented using React for the UI and client-side state management, vanilla CSS for ordinary CSS styling, Bootstrap for easy link and button CSS styling, Flexbox for CSS layouts, React Router for navigating between components on webpages, localStorage to store and later access the shopper's login token, and Axios for sending HTTP requests to the server (specifically, by making XMLHttpRequests). Hence this app is also a MERN (Mongoose, Express, React, Node) stack app.
 
 React Components:
 
