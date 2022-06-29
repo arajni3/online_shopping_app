@@ -7,7 +7,7 @@ This web app incorporates the full stack, not just the front end or the back end
 
 Tech Stack and Frameworks:
 
-The backend is implemented using Node and Express to create the server and its route handlers, Bcrypt to encrypt passwords, and Mongoose to connect to and utilize MongoDB as a database to store shopper information in JSON format. The frontend is implemented using React for the UI and client-side state management, vanilla CSS for ordinary CSS styling, Bootstrap for easy link and button CSS styling, Flexbox for CSS layouts, React Router for navigating between components on webpages, localStorage to store and later access the shopper's login token, and Axios for sending HTTP requests to the server (specifically, by making XMLHttpRequests). Hence this app is also a MERN (Mongoose, Express, React, Node) stack app.
+The backend is implemented using Node and Express to create the server and the REST API, Bcrypt to encrypt passwords, and Mongoose to connect to and utilize MongoDB as a database to store shopper information in JSON format. The frontend is implemented using React for the UI and client-side state management, vanilla CSS for ordinary CSS styling, Bootstrap for easy link and button CSS styling, Flexbox for CSS layouts, React Router for navigating between components on webpages, localStorage to store and later access the shopper's login token, and Axios for sending HTTP requests to the server (specifically, by making XMLHttpRequests). Hence this app is also a MERN (Mongoose, Express, React, Node) stack app.
 
 React Components:
 
@@ -22,4 +22,4 @@ React Components:
 
 In all the React component pages except for App, Home, CreateAccount, and Login, the app immediately upon page access navigates the shopper back to the home page if the user tries to access those component pages without being signed into an account.
 
-The server creation and MongoDB connection are both done in index.js. All Axios HTTP requests are handled by the router created in shopping.route.js, which is used in server.js. The creation of the endpoint for the router as well as the connection from the client to the server are both done in server.js, which is used in index.js.
+The server creation and MongoDB connection are both done in index.js. All Axios HTTP requests are handled by the REST API created in shopping.route.js. The creation of the endpoint for the REST API as well as the connection from the client to the server are both done in server.js, which is used in index.js.
