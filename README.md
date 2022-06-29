@@ -22,4 +22,4 @@ React Components:
 
 In all the React component pages except for App, Home, CreateAccount, and Login, the app immediately upon page access navigates the shopper back to the home page if the user tries to access those component pages without being signed into an account.
 
-The server creation and MongoDB connection are both done in index.js. All Axios HTTP requests are handled by the REST API created in shopping.route.js. The creation of the endpoint for the REST API as well as the connection from the client to the server are both done in server.js, which is used in index.js.
+The server creation and MongoDB connection are both done in index.js. The MongoDB collection that actually stores shopper data in the database is created in shopping.controller.js. All Axios HTTP requests are handled by the REST API created in shopping.route.js. The creation of the endpoint for the REST API as well as the connection from the client to the server are both done in server.js, which is used in index.js.
