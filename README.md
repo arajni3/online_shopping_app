@@ -1,10 +1,14 @@
 # online_shopping_app
-This is version 1 of my full stack online shopping web app. The app is hosted on Heroku on the following website: https://ashwin-online-shopping-store.herokuapp.com/. This web app incorporates the full stack, not just the front end or the back end. By implementing the full stack on my own, I have been able to make the front-end logic compatible with the back-end logic seamlessly. This makes the development process of this app a great improvement from those of apps made by many companies. 
+This is version 1 of my full stack online shopping web app. The app is hosted on Heroku on the following website: https://ashwin-online-shopping-store.herokuapp.com/.
+
+Project Purpose:
+
+This web app incorporates the full stack, not just the front end or the back end. By implementing the full stack on my own, I have been able to make the front-end logic compatible with the back-end logic seamlessly. This makes the development process of this app a great improvement from those of apps made by many companies. Thus, this project will hopefully convince many development teams and startups to embrace and invest in full stack developer positions.
 
 Tech Stack and Frameworks:
 
 The backend is implemented using Node and Express to implement the server and its route handlers, Bcrypt for password encryption, Mongoose
-to connect to and utilize MongoDB as a database for storing shopper information in JSON format, and localStorage for storing the shopper's login token. The frontend is implemented using React for the UI and client-side state management, vanilla CSS for ordinary CSS styling, Bootstrap for easy button and webpage link CSS styling, Flexbox for CSS layouts, React Router for navigating between components on webpages, and Axios for sending HTTP requests to the server (specifically, by making XMLHttpRequests). Hence this app is also a MERN (Mongoose, Express, React, Node) stack app.
+to connect to and utilize MongoDB as a database for storing shopper information in JSON format, and localStorage for storing the shopper's login token. The frontend is implemented using React for the UI and client-side state management, React Router for navigating between components on webpages, vanilla CSS for ordinary CSS styling, Bootstrap for easy button and webpage link CSS styling, Flexbox for CSS layouts, and Axios for sending HTTP requests to the server (specifically, by making XMLHttpRequests). Hence this app is also a MERN (Mongoose, Express, React, Node) stack app.
 
 React Components:
 
