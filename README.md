@@ -3,7 +3,7 @@ This is version 1 of my full stack online shopping web app. The app is hosted on
 
 The backend is implemented using Node and Express to implement the server and its route handlers, Bcrypt for password encryption, Mongoose
 to connect to and utilize MongoDB as a database for storing shopper information in JSON format, and localStorage for storing the shopper's login token. The frontend is implemented using React for the UI and client-side state management, vanilla CSS for ordinary CSS styling, Bootstrap for easy link and button CSS styling, Flexbox for CSS layouts, React Router for navigating between components on webpages,
-and Axios for sending HTTP requests to the server (specifically, by making XMLHttpRequests). 
+and Axios for sending HTTP requests to the server (specifically, by making XMLHttpRequests). Hence this app is also a MERN (Mongoose, Express, React, Node) stack app.
 
 React Components:
 
