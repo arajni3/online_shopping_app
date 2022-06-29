@@ -1,5 +1,5 @@
 # online_shopping_app
-This is version 1 of my full stack online shopping web app. The app is hosted on Heroku on the following website: https://ashwin-online-shopping-store.herokuapp.com/. This web app incorporates the full stack, not just the front end or the back end. By implementing the full stack on my own, I have been able to make the front-end logic compatible with the back-end logic seamlessly. This makes the development process of this app different from apps made by many companies. 
+This is version 1 of my full stack online shopping web app. The app is hosted on Heroku on the following website: https://ashwin-online-shopping-store.herokuapp.com/. This web app incorporates the full stack, not just the front end or the back end. By implementing the full stack on my own, I have been able to make the front-end logic compatible with the back-end logic seamlessly. This makes the development process of this app a great improvement from those of apps made by many companies. 
 
 Tech Stack and Frameworks:
 
