@@ -3,7 +3,7 @@ This is version 1 of my full stack online shopping web app. The app is hosted on
 
 Project Purpose:
 
-This web app incorporates the full stack, not just the front end or the back end. By implementing the full stack on my own, I have been able to make the front-end logic compatible with the back-end logic seamlessly. This makes the development process of this app a great improvement from those of apps made by many companies. Thus, this project will hopefully convince many development teams and startups to embrace and invest in full stack developer positions.
+This web app incorporates the full stack, not just the front end or the back end. By implementing the full stack on my own, I have been able to make the front-end logic compatible with the back-end logic seamlessly and not have to figure out someone else's API to complete the app. Hence, the development process of this app was more efficient than the development processes of apps made by many companies, which is what I intended to prove by carrying it out. Thus, this project will hopefully convince many development teams and startups to embrace and invest in full stack developer positions so that they can speed up their app development processes and reduce development costs.
 
 Tech Stack and Frameworks:
 
