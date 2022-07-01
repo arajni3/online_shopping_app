@@ -45,7 +45,7 @@ function Purchase() {
             navigate("/", {replace: true});
         } else if (purchaseSuccessState == 2) {
             // success message displays at the bottom for 2 seconds before navigating to shopping page
-            setTimeOut(() => {
+            setTimeout(() => {
                 navigate("../shopping", {replace: true});
             }, 2000);            
         }
