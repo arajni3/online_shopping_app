@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
 import signOut from "../helper-functions/signOut.js";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -10,9 +10,9 @@ function CreateAccount() {
     const [username, setUserName] = useState("");
     const [password, setPassWord] = useState("");
 
-    const submittedForm = useRef(false);
-    const succeeded = useRef(false);
-    const [afterSuccessMessage, setAfterSuccessMessage] = useState(false);
+    // successState = 0 means unsubmitted form, 1 means invalid account creation (the login already exists),
+    // and 2 means successful account creation
+    const [successState, setSuccessState] = useState(0);
 
     async function handleSubmit(event) {
         event.preventDefault();
@@ -23,16 +23,10 @@ function CreateAccount() {
             userName: username,
             passWord: password
         });
-
-        // display success message for 2 seconds before redirecting to login page
         if (response.data.succeeded) {
-            submittedForm.current = true;
-            succeeded.current = true;
-            setTimeout(() => {
-                setAfterSuccessMessage(true);
-            }, 2000);
+            setSuccessState(2);
         } else {
-            submittedForm.current = true;
+            setSuccessState(1);
         }
     }
 
@@ -42,10 +36,13 @@ function CreateAccount() {
     }, []);
 
     useEffect(() => {
-        if (afterSuccessMessage) {
-            navigate("../login");
+        if (successState == 2) {
+            // success message displays at the bottom for 2 seconds before navigating to login page
+            setTimeout(() => {
+                navigate("../login");
+            }, 2000);
         }
-    }, [afterSuccessMessage]);
+    }, [successState]);
 
     return (
         <>
@@ -53,7 +50,7 @@ function CreateAccount() {
         <br />
         <br />
         <br />
-        {(!succeeded.current && submittedForm.current) && <div style={{backgroundColor: "#F08080", fontWeight: "bold", width: "200px", height: "100px", color: "2F4F4F", display: "block", margin: "0 auto", textAlign: "center"}}>Invalid username or password.</div>}
+        {successState == 1 && <div style={{backgroundColor: "#F08080", fontWeight: "bold", width: "200px", height: "100px", color: "2F4F4F", display: "block", margin: "0 auto", textAlign: "center"}}>Invalid username or password.</div>}
         <br />
         <br />
         <br />
@@ -74,7 +71,7 @@ function CreateAccount() {
         <br />
         <br />
         <br />
-        {succeeded.current && <div style={{backgroundColor: "#7CFC00", fontWeight: "bold", width: "200px", height: "100px", color: "2F4F4F", display: "flex", justifyContent: "center", alignItems: "center", margin: "auto"}}>Account creation was successful. Redirecting to login page...</div>}
+        {successState == 2 && <div style={{backgroundColor: "#7CFC00", fontWeight: "bold", width: "200px", height: "100px", color: "2F4F4F", display: "flex", justifyContent: "center", alignItems: "center", margin: "auto"}}>Account creation was successful. Redirecting to login page...</div>}
         </>
     );
 }

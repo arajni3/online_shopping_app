@@ -17,9 +17,9 @@ function Purchase() {
     const [stateOrProvince, setStateOrProvince] = useState("");
     const [postalCode, setPostalCode] = useState("");
 
-    const submittedForm = useRef(false);
-    const purchaseSucceeded = useRef(false);
-    const [afterSuccessMessage, setAfterSuccessMessage] = useState(false);
+    // purchaseSuccessState = 0 means unsubmitted form, 1 means invalid account creation (the login already exists),
+    // and 2 means successful account creation
+    const [purchaseSuccessState, setPurchaseSuccessState] = useState(0);
 
     async function handleSubmit(event) {
         event.preventDefault();
@@ -29,13 +29,9 @@ function Purchase() {
             encryptValue: localStorage.getItem("encryptValue")
         });
         if (response.data.succeeded) {
-            submittedForm.current = true;
-            purchaseSucceeded.current = true;
-            setTimeout(() => {
-                setAfterSuccessMessage(true);
-            }, 2000); 
+            setPurchaseSuccessState(2);
         } else {
-            submittedForm.current = true;
+            setPurchaseSuccessState(1);
         }
     }
 
@@ -45,19 +41,22 @@ function Purchase() {
     }, []);
 
     useEffect(() => {
-        if (afterSuccessMessage) {
-            navigate("../shopping", {replace: true});
-        } else if (!userNameFromLS.current) {
+        if (!userNameFromLS.current) {
             navigate("/", {replace: true});
+        } else if (purchaseSuccessState == 2) {
+            // success message displays at the bottom for 2 seconds before navigating to shopping page
+            setTimeOut(() => {
+                navigate("../shopping", {replace: true});
+            }, 2000);            
         }
-    }, [afterSuccessMessage]);
+    }, [purchaseSuccessState]);
 
     return (
         <>
         <h1 style={{textAlign: "center"}}>Make a Purchase</h1>
         <br />
         <br />
-        {(!purchaseSucceeded.current && submittedForm.current) && <div style={{backgroundColor: "#F08080", fontWeight: "bold", width: "200px", height: "100px", color: "2F4F4F", display: "block", margin: "0 auto", textAlign: "center"}}>Purchase cannot be made. Your cart is empty. Please go back to the shopping page and add to your cart.</div>}
+        {purchaseSuccessState == 1 && <div style={{backgroundColor: "#F08080", fontWeight: "bold", width: "200px", height: "100px", color: "2F4F4F", display: "block", margin: "0 auto", textAlign: "center"}}>Purchase cannot be made. Your cart is empty. Please go back to the shopping page and add to your cart.</div>}
         <br />
         <br />
         <Link className="btn" to="../shopping/cart" style={{backgroundColor: "#800000", color: "#FFFFFF", display: "block", margin: "0 auto", width: "fit-content"}}>View Your Cart</Link>
@@ -118,7 +117,7 @@ function Purchase() {
         <br />
         <br />
         <br />
-        {(purchaseSucceeded.current && submittedForm.current) && <div style={{backgroundColor: "#7CFC00", fontWeight: "bold", width: "200px", height: "100px", color: "2F4F4F", display: "flex", justifyContent: "center", alignItems: "center", margin: "auto"}}>Purchase was successful. Going back to shopping page...</div>}
+        {purchaseSuccessState == 2 && <div style={{backgroundColor: "#7CFC00", fontWeight: "bold", width: "200px", height: "100px", color: "2F4F4F", display: "flex", justifyContent: "center", alignItems: "center", margin: "auto"}}>Purchase was successful. Going back to shopping page...</div>}
         </>
     );
 }

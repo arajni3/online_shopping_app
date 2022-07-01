@@ -10,9 +10,9 @@ function Login() {
     const [username, setUserName] = useState("");
     const [password, setPassWord] = useState("");
 
-    const submittedForm = useRef(false);
-    const loggedIn = useRef(false);
-    const [afterSuccessMessage, setAfterSuccessMessage] = useState(false);
+    // encryptValue = null means uninitialized, "" means invalid login, and a nonempty value means
+    // successful login
+    const [encryptValue, setEncryptValue] = useState(null);
 
     async function handleSubmit(event) {
         // prevent default behavior of form submit, which is browser tab refresh
@@ -25,18 +25,8 @@ function Login() {
         });
         // if login was valid, store login token (username with bcrypt value in local storage)
         // and set value of loggedIn to response.found
-        if (response.data.encryptValue) {
-            localStorage.setItem("userName", username);
-            localStorage.setItem("encryptValue", response.data.encryptValue);
-            
-            submittedForm.current = true;
-            loggedIn.current = true;
-            setTimeout(() => {
-                setAfterSuccessMessage(true);
-            }, 2000);        
-        } else {
-            submittedForm.current = true;
-        }
+        // response.data.encryptValue is either the empty string or a nonempty string
+        setEncryptValue(response.data.encryptValue);
     };
 
     useEffect(() => {
@@ -45,10 +35,18 @@ function Login() {
     }, []);
     
     useEffect(() => {
-        if (userNameFromLS.current || afterSuccessMessage) {
+        if (userNameFromLS.current) {
             navigate("../shopping", {replace: true});
-        } 
-    }, [afterSuccessMessage]);
+        } else if (encryptValue !== null && encryptValue !== "") {
+            localStorage.setItem("userName", username);
+            localStorage.setItem("encryptValue", encryptValue);
+
+            // success message displays at the bottom for 2 seconds before navigating to shopping page
+            setTimeout(() => {
+                navigate("../shopping", {replace: true});
+            }, 2000);  
+        }
+    }, [encryptValue]);
 
     return (
         <>
@@ -56,7 +54,7 @@ function Login() {
         <br />
         <br />
         <br />
-        {(!loggedIn.current && submittedForm.current) && <div style={{backgroundColor: "#F08080", fontWeight: "bold", width: "200px", height: "100px", color: "2F4F4F", display: "block", margin: "0 auto", textAlign: "center"}}>Invalid username or password</div>}
+        {encryptValue === null && <div style={{backgroundColor: "#F08080", fontWeight: "bold", width: "200px", height: "100px", color: "2F4F4F", display: "block", margin: "0 auto", textAlign: "center"}}>Invalid username or password</div>}
         <br />
         <br />
         <br />
@@ -77,7 +75,7 @@ function Login() {
         <br />
         <br />
         <br />
-        {(loggedIn.current && submittedForm.current) && <div style={{backgroundColor: "#7CFC00", fontWeight: "bold", width: "200px", height: "100px", color: "2F4F4F", display: "flex", justifyContent: "center", alignItems: "center", margin: "auto"}}>Sign-in was successful. Redirecting to shopping page...</div>}
+        {(encryptValue !== null && encryptValue !== "") && <div style={{backgroundColor: "#7CFC00", fontWeight: "bold", width: "200px", height: "100px", color: "2F4F4F", display: "flex", justifyContent: "center", alignItems: "center", margin: "auto"}}>Sign-in was successful. Redirecting to shopping page...</div>}
         </>
     );
 }
