@@ -54,7 +54,7 @@ function Login() {
         <br />
         <br />
         <br />
-        {encryptValue === null && <div style={{backgroundColor: "#F08080", fontWeight: "bold", width: "200px", height: "100px", color: "2F4F4F", display: "block", margin: "0 auto", textAlign: "center"}}>Invalid username or password</div>}
+        {encryptValue === "" && <div style={{backgroundColor: "#F08080", fontWeight: "bold", width: "200px", height: "100px", color: "2F4F4F", display: "block", margin: "0 auto", textAlign: "center"}}>Invalid username or password</div>}
         <br />
         <br />
         <br />
