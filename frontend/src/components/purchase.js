@@ -56,7 +56,7 @@ function Purchase() {
         <h1 style={{textAlign: "center"}}>Make a Purchase</h1>
         <br />
         <br />
-        {purchaseSuccessState == 1 && <div style={{backgroundColor: "#F08080", fontWeight: "bold", width: "200px", height: "100px", color: "2F4F4F", display: "block", margin: "0 auto", textAlign: "center"}}>Purchase cannot be made. Your cart is empty. Please go back to the shopping page and add to your cart.</div>}
+        {purchaseSuccessState == 1 && <div style={{backgroundColor: "#F08080", fontWeight: "bold", width: "300px", height: "150px", color: "2F4F4F", display: "block", margin: "0 auto", textAlign: "center"}}>Purchase cannot be made. Your cart is empty. Please go back to the shopping page and add to your cart.</div>}
         <br />
         <br />
         <Link className="btn" to="../shopping/cart" style={{backgroundColor: "#800000", color: "#FFFFFF", display: "block", margin: "0 auto", width: "fit-content"}}>View Your Cart</Link>
