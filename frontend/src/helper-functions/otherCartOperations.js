@@ -1,4 +1,4 @@
-import axiosAWS from "../httpRequests.js";
+import {axiosAWS} from "../httpRequests.js";
 
 export const getShoppingItems = async (selections) => {
     let shoppingSelections = (await axiosAWS.get("imageData")).data.imageData;
