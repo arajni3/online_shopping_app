@@ -36,7 +36,7 @@ function Cart() {
             navigate("/", {replace: true});
         } else {
             async function getCart() {
-                let asyncInitialCart = (await axiosInstance.get("/shopper/cart", {params: {userName: userName.current, encryptValue: encryptValue.current}})).data.cart;
+                let asyncInitialCart = (await axiosShopping.get("/shopper/cart", {params: {userName: userName.current, encryptValue: encryptValue.current}})).data.cart;
                 setCart(asyncInitialCart);
             }
             getCart();

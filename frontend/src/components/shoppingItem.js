@@ -1,5 +1,5 @@
 import React from 'react';
-import axiosInstance from "../httpRequests.js";
+import {axiosShopping} from "../httpRequests.js";
 import formattedCost from "../helper-functions/formatCost.js";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -7,7 +7,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 function ShoppingItem({shoppingSelection: {type, sthreeKey, cost}, userName, encryptValue}) {
     // add the shopping selection (represented by its src) to the shopper's cart
     async function addToCart(type, username, encryptvalue) {
-        await axiosInstance.patch('/shopper/addToCart', {
+        await axiosShopping.patch('/shopper/addToCart', {
             userName: username,
             encryptValue: encryptvalue,
             type: type
