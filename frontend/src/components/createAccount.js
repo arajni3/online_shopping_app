@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
 import signOut from "../helper-functions/signOut.js";
 import "bootstrap/dist/css/bootstrap.min.css";
-import axiosInstance from "../httpRequests.js";
+import {axiosShopping} from "../httpRequests.js";
 
 // very similar to Login
 function CreateAccount() {
@@ -19,7 +19,7 @@ function CreateAccount() {
 
         signOut();
 
-        let response = await axiosInstance.post('/createAccount', {
+        let response = await axiosShopping.post('/createAccount', {
             userName: username,
             passWord: password
         });

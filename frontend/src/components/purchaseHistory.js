@@ -1,7 +1,8 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {useNavigate} from 'react-router-dom';
+import formattedCost from "../helper-functions/formatCost.js";
 import {getShoppingItems, getTotal} from "../helper-functions/otherCartOperations.js";
-import axiosInstance from "../httpRequests.js";
+import {axiosShopping} from "../httpRequests.js";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function PurchaseHistory() {
@@ -31,7 +32,7 @@ function PurchaseHistory() {
             navigate("/", {replace: true});
         } else {
             async function getPurchaseHistory() {
-                let asyncInitialPH = (await axiosInstance.get("/shopper/purchaseHistory", {params: {userName: userName.current, encryptValue: encryptValue.current}})).data.purchaseHistory;
+                let asyncInitialPH = (await axiosShopping.get("/shopper/purchaseHistory", {params: {userName: userName.current, encryptValue: encryptValue.current}})).data.purchaseHistory;
                 setPurchaseHistory(asyncInitialPH);
             }
             getPurchaseHistory();
@@ -65,7 +66,7 @@ function PurchaseHistory() {
                         return (
                             <div key={index2} style={{display: "flex", justifyContent: "space-between", alignItems: "center", border: "1px solid black"}}>
                                 <p>{objForType.type}</p>
-                                <p>${objForType.cost}</p>
+                                <p>${formattedCost(objForType.cost)}</p>
                                 <div></div>
                             </div>
                         );
@@ -76,7 +77,7 @@ function PurchaseHistory() {
             <br />
             <div style={{display: "flex", justifyContent: "space-between", alignItems: "center", fontWeight: "bold"}}>
                 <p style={{fontSize: "20px"}}>Total:</p>
-                <p>${totalHistory[index]}</p>
+                <p>${formattedCost(totalHistory[index])}</p>
                 <div></div>
             </div>
             <br />                    
@@ -86,7 +87,7 @@ function PurchaseHistory() {
         <br />
         <div style={{display: "flex", justifyContent: "space-between", alignItems: "center", fontWeight: "bold"}}>
             <p style={{fontSize: "24px"}}>Overall Total:</p>
-            <p>${overallSum}</p>
+            <p>${overallSum + (overallSum % 1 === 0)? "" : ".00"}</p>
             <div></div>
         </div>
         </>

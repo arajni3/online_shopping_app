@@ -1,8 +1,8 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
-import shoppingSelections from "../constants/shoppingSelections.js";
 import ShoppingItem from "./shoppingItem.js";
 import signOut from "../helper-functions/signOut.js";
+import {axiosAWS} from "../httpRequests.js";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function Shopping() { 
@@ -10,14 +10,7 @@ function Shopping() {
     let userName = useRef(localStorage.getItem("userName") || "");
     let encryptValue = useRef(localStorage.getItem("encryptValue") || "");
 
-    let rows = [];
-    for (let i = 0; i < shoppingSelections.length; i += 3) {
-        let row = [];
-        for (let j = i; (j <= i + 2) && (j < shoppingSelections.length); ++j) {
-            row.push(shoppingSelections[j]);
-        }
-        rows.push(row);
-    }
+    let [rows, setRows] = useState([]);
 
     const handleSignOut = () => {
         signOut();
@@ -31,8 +24,25 @@ function Shopping() {
 
         if (!userName.current) {
             navigate("/", {replace: true});
+        } else {
+            async function getImageData() {
+                let imageData = (await axiosAWS.get("imageData")).data.imageData;
+
+                let shoppingSelectionRows = [];
+                for (let i = 0; i < imageData.length; i += 3) {
+                    let third = i + 3;
+
+                    let row = [];
+                    for (let j = i; (j < third) && (j < imageData.length); ++j) {
+                        row.push(imageData[j]);
+                    }
+                    shoppingSelectionRows.push(row);
+                }
+                setRows(shoppingSelectionRows);
+            }
+            getImageData();
         }
-    });
+    }, []);
 
     return (
         <>
@@ -49,7 +59,7 @@ function Shopping() {
             return (
                 <React.Fragment key={index}>
                 <div style={{display: "flex", justifyContent: "space-around", alignItems: "center"}}>
-                    {row.map((item, index2) => (<ShoppingItem key={index2} shoppingSelection={item} userName={userName.current} encryptValue={encryptValue.current} />))}
+                    {row.map((item, index2) => (<ShoppingItem key={index2} shoppingSelection={{type: item['image_description'], sthreeKey: item['image_sthree_key'], cost: item['cost']}} userName={userName.current} encryptValue={encryptValue.current} />))}
                 </div>
                 <br />
                 </React.Fragment>

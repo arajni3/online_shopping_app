@@ -1,7 +1,8 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {useNavigate} from 'react-router-dom';
+import formattedCost from "../helper-functions/formatCost.js";
 import {getShoppingItems, getTotal} from "../helper-functions/otherCartOperations.js";
-import axiosInstance from "../httpRequests.js";
+import {axiosShopping} from "../httpRequests.js";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function Cart() {
@@ -15,7 +16,7 @@ function Cart() {
 
     // add the shopping selection (represented by its src) to the shopper's cart
     function deleteFromCart(type, username, encryptvalue) {
-        return axiosInstance.patch('/shopper/deleteFromCart', {
+        return axiosShopping.patch('/shopper/deleteFromCart', {
             userName: username,
             encryptValue: encryptvalue,
             type: type
@@ -66,7 +67,7 @@ function Cart() {
                         return (
                             <div key={index} style={{display: "flex", justifyContent: "space-between", alignItems: "center", border: "1px solid black"}}>
                                 <p>{objForType.type}</p>
-                                <p>${objForType.cost}</p>
+                                <p>${formattedCost(objForType.cost)}</p>
                                 <button className="btn btn-danger" onClick={() => {handleDelete(objForType.type);}}>Remove from Cart</button>
                             </div>
                         );
@@ -77,7 +78,7 @@ function Cart() {
             <br />
             <div style={{display: "flex", justifyContent: "space-between", alignItems: "center", fontWeight: "bold"}}>
                 <p style={{fontSize: "20px"}}>Total:</p>
-                <p>${total}</p>
+                <p>${formattedCost(total)}</p>
                 <div></div>
             </div>
         </>

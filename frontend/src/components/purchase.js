@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
-import axiosInstance from "../httpRequests.js";
+import {axiosShopping} from "../httpRequests.js";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function Purchase() {
@@ -24,7 +24,7 @@ function Purchase() {
     async function handleSubmit(event) {
         event.preventDefault();
 
-        let response = await axiosInstance.patch("/shopper/purchase", {
+        let response = await axiosShopping.patch("/shopper/purchase", {
             userName: userNameFromLS.current, 
             encryptValue: localStorage.getItem("encryptValue")
         });

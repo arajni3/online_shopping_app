@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {useNavigate} from 'react-router-dom';
-import axiosInstance from "../httpRequests.js";
+import {axiosShopping} from "../httpRequests.js";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function Login() {
@@ -19,7 +19,7 @@ function Login() {
         event.preventDefault();
 
         // send axios post request 
-        let response = await axiosInstance.post('/login', {
+        let response = await axiosShopping.post('/login', {
             userName: username,
             passWord: password
         });
