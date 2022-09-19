@@ -1,4 +1,4 @@
-FROM node:8.11.1
+FROM node:16.15.1
 
 LABEL version="2.0"
 
