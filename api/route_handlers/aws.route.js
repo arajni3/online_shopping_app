@@ -1,6 +1,8 @@
 import express from "express";
+import dotenv from "dotenv";
 import {DynamoDBClient, ScanCommand} from "@aws-sdk/client-dynamodb";
 
+dotenv.config();
 const router = express.Router();
 const dynamoClient = new DynamoDBClient({region: "us-east-1"});
 
