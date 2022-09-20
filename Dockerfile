@@ -7,7 +7,7 @@ LABEL description="ashwin online shopping app (version 1.0 was on Heroku)"
 WORKDIR /usr/src/online_shopping_app
 
 COPY package*.json ./
-RUN npm install
+RUN npm cache clean --force && npm install
 
 COPY . . 
 
