@@ -12,6 +12,9 @@ RUN npm cache clean --force && npm install
 COPY . . 
 
 RUN cd frontend && npm install && npm run build
+
+COPY . . 
 EXPOSE 5000
+
 
 CMD ["npm", "run", "start"]
