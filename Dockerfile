@@ -13,7 +13,6 @@ COPY . .
 
 RUN cd frontend && npm install && npm run build
 
-COPY . . 
 EXPOSE 5000
 
 
