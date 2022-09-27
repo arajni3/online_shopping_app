@@ -14,7 +14,7 @@ router.get("/imageData", async (req, res) => {
     };
 
     let scanResults = [];
-    let items;
+    let items = {};
     do {
         //let command = new ScanCommand(params);
         items = await dynamoClient.send(new ScanCommand(params));
