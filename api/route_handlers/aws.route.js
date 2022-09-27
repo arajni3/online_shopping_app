@@ -23,6 +23,7 @@ router.get("/imageData", async (req, res) => {
         params.ExclusiveStartKey  = items.LastEvaluatedKey;
     } while(typeof items.LastEvaluatedKey !== "undefined");
     
+    console.log(scanResults);
     response.imageData = scanResults;
     res.json(response);
 });
