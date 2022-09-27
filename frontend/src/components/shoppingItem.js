@@ -5,6 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 // in Shopping, pass a shopping selection as prop shoppingSelection to ShoppingItem
 function ShoppingItem({type, sthreeKey, cost, userName, encryptValue}) {
+    console.log(type, sthreeKey, cost);
     // add the shopping selection (represented by its src) to the shopper's cart
     async function addToCart(type, username, encryptvalue) {
         await axiosShopping.patch('/shopper/addToCart', {
