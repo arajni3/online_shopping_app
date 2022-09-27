@@ -25,12 +25,8 @@ function Shopping() {
         if (!userName.current) {
             navigate("/", {replace: true});
         } else {
-            async function getImageData() {
-                let awaited = await axiosAWS.get("imageData");
-                console.log(`status: ${awaited.status}`);
-                console.log(`statusText: ${awaited.statusText}`);
-                
-                let imageData = awaited.data.imageData;
+            async function getImageData() {                
+                let imageData = (await axiosAWS.get("imageData")).data.imageData;
                 
                 let shoppingSelectionRows = [];
                 for (let i = 0; i < imageData.length; i += 3) {
