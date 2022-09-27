@@ -54,6 +54,7 @@ function Shopping() {
         </nav>
         <br />
         <h1 style={{textAlign: "center"}}>View and Select from Our Selections!</h1>
+        <h2>{row.length}</h2>
         <br />  
         {rows.map((row, index) => {
             return (
