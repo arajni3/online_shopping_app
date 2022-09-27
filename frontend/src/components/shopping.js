@@ -56,6 +56,7 @@ function Shopping() {
         <h1 style={{textAlign: "center"}}>View and Select from Our Selections!</h1>
         <br />  
         {rows.length && rows.map((row, index) => {
+            console.log(row);
             return (
                 <React.Fragment key={index}>
                 <div style={{display: "flex", justifyContent: "space-around", alignItems: "center"}}>
