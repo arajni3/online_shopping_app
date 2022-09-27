@@ -4,7 +4,7 @@ import formattedCost from "../helper-functions/formatCost.js";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 // in Shopping, pass a shopping selection as prop shoppingSelection to ShoppingItem
-function ShoppingItem({shoppingSelection: {type, sthreeKey, cost}, userName, encryptValue}) {
+function ShoppingItem({type, sthreeKey, cost, userName, encryptValue}) {
     // add the shopping selection (represented by its src) to the shopper's cart
     async function addToCart(type, username, encryptvalue) {
         await axiosShopping.patch('/shopper/addToCart', {
