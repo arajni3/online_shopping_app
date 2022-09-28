@@ -56,11 +56,10 @@ function Shopping() {
         <h1 style={{textAlign: "center"}}>View and Select from Our Selections!</h1>
         <br />  
         {rows.length && rows.map((row, index) => {
-            console.log(JSON.stringify(row));
             return (
                 <React.Fragment key={index}>
                 <div style={{display: "flex", justifyContent: "space-around", alignItems: "center"}}>
-                    {row.map((item, index2) => (<ShoppingItem key={index2} type={item['image_description']} sthreeKey={item['image_sthree_key']} cost={item['cost']} userName={userName.current} encryptValue={encryptValue.current} />))}
+                    {row.map((item, index2) => (<ShoppingItem key={index2} type={item['image_description']['S']} sthreeKey={item['image_sthree_key']['S']} cost={item['cost']['N']} userName={userName.current} encryptValue={encryptValue.current} />))}
                 </div>
                 <br />
                 </React.Fragment>

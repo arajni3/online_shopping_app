@@ -6,11 +6,11 @@ export const getShoppingItems = async (selections) => {
     for (let i = 0; i < selections.length; ++i) {
         for (let j = 0; j < shoppingSelections.length; ++j) {
             let curType = selections[i];
-            if (curType === shoppingSelections[j]['image_description']) {
+            if (curType === shoppingSelections[j]['image_description']['S']) {
                 if (obj.hasOwnProperty(curType)) {
                     obj[curType].count++;
                 } else {
-                    obj[curType] = ({type: curType, cost: shoppingSelections[j]['cost'], count: 1});
+                    obj[curType] = ({type: curType, cost: parseFloat(shoppingSelections[j]['cost']['N']), count: 1});
                 }
             }
         }
