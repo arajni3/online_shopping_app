@@ -10,8 +10,8 @@ function Cart() {
     const [cart, setCart] = useState([]);
     const userName = useRef(localStorage.getItem("userName") || "");
     const encryptValue = useRef(localStorage.getItem("encryptValue") || "");
-
-    let shoppingItems = getShoppingItems(cart);
+    
+    let [shoppingItems, setShoppingItems] = useState({});
     let total = getTotal(shoppingItems);
 
     // add the shopping selection (represented by its src) to the shopper's cart
@@ -43,6 +43,10 @@ function Cart() {
         }
     }, []);
 
+    useEffect(() => {
+        setShoppingItems(getShoppingItems(cart));
+    }, [cart]);
+    
     return (
         <>
             <h1 style={{textAlign: "center"}}>Your Cart</h1>
