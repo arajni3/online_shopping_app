@@ -1,2 +1,2 @@
-const formattedCost = (cost) => cost + (cost % 1 === 0)? "" : ".00";
+const formattedCost = (cost) => parseFloat(cost).toFixed(2);
 export default formattedCost;
