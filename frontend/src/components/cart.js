@@ -2,7 +2,7 @@ import React, {useState, useEffect, useRef} from 'react';
 import {useNavigate} from 'react-router-dom';
 import formattedCost from "../helper-functions/formatCost.js";
 import {getShoppingItems, getTotal} from "../helper-functions/otherCartOperations.js";
-import {axiosShopping} from "../httpRequests.js";
+import {axiosShopping, axiosAWS} from "../httpRequests.js";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function Cart() {
@@ -44,7 +44,14 @@ function Cart() {
     }, []);
 
     useEffect(() => {
-        setShoppingItems(getShoppingItems(cart));
+        async function getList() {
+            let imageData = (await axiosAWS.get("imageData")).data.imageData;
+            setShoppingItems(getShoppingItems(cart, imageData));
+        }
+        
+        if (cart.length) {
+            getList();
+        }
     }, [cart]);
     
     return (
