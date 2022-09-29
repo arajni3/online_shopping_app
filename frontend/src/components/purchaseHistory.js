@@ -2,7 +2,7 @@ import React, {useState, useEffect, useRef} from 'react';
 import {useNavigate} from 'react-router-dom';
 import formattedCost from "../helper-functions/formatCost.js";
 import {getShoppingItems, getTotal} from "../helper-functions/otherCartOperations.js";
-import {axiosShopping} from "../httpRequests.js";
+import {axiosShopping, axiosAWS} from "../httpRequests.js";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function PurchaseHistory() {
@@ -12,16 +12,15 @@ function PurchaseHistory() {
 
     const [purchaseHistory, setPurchaseHistory] = useState([]);
 
-    let shoppingItemsHistory = [];
+    const [shoppingItemsHistory, setShoppingItemsHistory] = useState([]);
+    
     let totalHistory = [];
-    for (let i = 0; i < purchaseHistory.length; ++i) {
-        let shoppingItems = getShoppingItems(purchaseHistory[i]);
-        shoppingItemsHistory.push(shoppingItems);
-        totalHistory.push(getTotal(shoppingItems));
-    }
     let overallSum = 0;
-    for (let i = 0; i < totalHistory.length; ++i) {
-        overallSum += totalHistory[i];
+    for (let i = 0; i < purchaseHistory.length; ++i) {
+        let curTotal = getTotal(shoppingItemsHistory[i]);
+        
+        overallSum += curTotal;
+        totalHistory.push(curTotal);
     }
 
     useEffect(() => {
@@ -39,6 +38,23 @@ function PurchaseHistory() {
         }
     }, []);
 
+    useEffect(() => {
+        async function getLists() {
+            let imageData = (await axiosAWS.get("imageData")).data.imageData;
+            
+            let shoppingHistory = [];
+            for (let i = 0; i < purchaseHistory.length; ++i) {
+                let shoppingItems = getShoppingItems(purchaseHistory[i], imageData);
+                shoppingHistory.push(shoppingItems);
+            }
+            setShoppingItemsHistory(shoppingHistory);
+        }
+        
+        if (purchaseHistory.length) {
+            getLists();
+        }
+    }, [purchaseHistory]);
+    
     return (
         <>
         <h1 style={{textAlign: "center"}}>Your Purchase History</h1>
