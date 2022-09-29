@@ -87,7 +87,7 @@ function PurchaseHistory() {
         <br />
         <div style={{display: "flex", justifyContent: "space-between", alignItems: "center", fontWeight: "bold"}}>
             <p style={{fontSize: "24px"}}>Overall Total:</p>
-            <p>${overallSum + (overallSum % 1 === 0)? "" : ".00"}</p>
+            <p>${formattedCost(overallSum)}</p>
             <div></div>
         </div>
         </>
