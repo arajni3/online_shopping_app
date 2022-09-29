@@ -11,7 +11,7 @@ function Cart() {
     const userName = useRef(localStorage.getItem("userName") || "");
     const encryptValue = useRef(localStorage.getItem("encryptValue") || "");
     
-    let [shoppingItems, setShoppingItems] = useState({});
+    const [shoppingItems, setShoppingItems] = useState({});
     let total = getTotal(shoppingItems);
 
     // add the shopping selection (represented by its src) to the shopper's cart
