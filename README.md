@@ -1,5 +1,5 @@
 # online_shopping_app
-This is version 2.0.0 of my full stack online shopping web app. The app is currently hosted on AWS ECS at https://ashwinsclothingstore.com.
+This is version 2.0.0 of my full stack online shopping web app. The app is currently hosted on the cloud at https://ashwinsclothingstore.com via AWS ECS.
 
 Main Differences from Version 1.0.0: Utilizes multiple AWS technologies; removes the array of constants storing URLs to online images and instead utilizes AWS S3, CloudFront, and DynamoDB to store image files and retrieve secure links to them. Also formats all dollar numbers, including integral ones, as two-decimal floats. As of version 2.0.0, the app is hosted on AWS ECS instead of Heroku.
 
