@@ -49,10 +49,7 @@ function PurchaseHistory() {
             }
             setShoppingItemsHistory(shoppingHistory);
         }
-        
-        if (purchaseHistory.length) {
-            getLists();
-        }
+        getLists();
     }, [purchaseHistory]);
     
     return (
