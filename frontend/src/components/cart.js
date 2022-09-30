@@ -48,10 +48,7 @@ function Cart() {
             let imageData = (await axiosAWS.get("imageData")).data.imageData;
             setShoppingItems(getShoppingItems(cart, imageData));
         }
-        
-        if (cart.length) {
-            getList();
-        }
+        getList();
     }, [cart]);
     
     return (
