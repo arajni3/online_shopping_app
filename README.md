@@ -1,7 +1,9 @@
 # online_shopping_app
 This is version 3.0.0 of my full stack online shopping web app. The app is currently hosted on the cloud at http://ashwinsclothingstore.com via AWS ECS.
 
-Version 3.0 Difference from Version 2.0: The backend has been rewritten into Spring Boot (Java) from Node.js. The Dockerfile has also been edited accordingly.
+Version 3.0 Difference from Version 2.0: The backend has been rewritten into Spring Boot (Java) from Node.js. The Dockerfile has also been edited accordingly. This Spring Boot app uses configurations, beans, and autowired dependency injections rather than always creating new objects.
+
+NOTE: the text below for the backend describes Version 2.0, however the underlying architectural API ideas (such as MVC and REST API architecturing) are not very different at all.
 
 Version 2.0 Main Differences from Version 1.0.0: Utilizes multiple AWS technologies; removes the array of constants storing URLs to online images and instead utilizes AWS S3, CloudFront, and DynamoDB to store image files and retrieve secure links to them. Also formats all dollar numbers, including integral ones, as two-decimal floats. As of version 2.0.0, the app is hosted on AWS ECS instead of Heroku.
 
