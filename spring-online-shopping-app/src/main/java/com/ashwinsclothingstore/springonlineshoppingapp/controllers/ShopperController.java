@@ -98,8 +98,8 @@ public class ShopperController {
         Shopper shopper = this.shopperRepository.findShopper(body.getUserName(), body.getEncryptValue());
         
         SucceededDto succeededDto;
-        if (this.shopper.getCartLength()) {
-            this.shopper.makePurchase();
+        if (shopper.getCartLength()) {
+            shopper.makePurchase();
             this.shopperRepository.save(shopper);
             succeededDto = new SucceededDto(true);
         } else {
