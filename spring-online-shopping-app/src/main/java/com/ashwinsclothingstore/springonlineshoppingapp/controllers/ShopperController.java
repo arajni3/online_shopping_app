@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import com.ashwinsclothingstore.springonlineshoppingapp.models.Shopper;
 import com.ashwinsclothingstore.springonlineshoppingapp.repositories.ShopperRepository;
@@ -35,7 +36,7 @@ public class ShopperController {
         
         SucceededDto succeededDto;
         if (shopper == null) {
-            this.shopperRepository.save(new Shopper(body.getUserName(), body.getPassWord(), new ArrayList<String>(), new ArrayList<ArrayList<String>>()));
+            this.shopperRepository.save(new Shopper(body.getUserName(), body.getPassWord(), new ArrayList<String>(), new ArrayList<List<String>>()));
             succeededDto = new SucceededDto(true);
         } else {
             succeededDto = new SucceededDto(false);

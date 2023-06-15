@@ -2,6 +2,7 @@ package com.ashwinsclothingstore.springonlineshoppingapp.models;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import java.util.List;
 import java.util.ArrayList;
 
 @Document(collection = "shoppers")
@@ -12,17 +13,17 @@ public class Shopper {
     private String userName;
     private String passWord;
     private String encryptValue;
-    private ArrayList<String> cart;
-    private ArrayList<ArrayList<String>> purchaseHistory;
+    private List<String> cart;
+    private List<List<String>> purchaseHistory;
 
     public Shopper () {}
-    public Shopper(String userName, String passWord, String encryptValue, ArrayList<String> cart, ArrayList<ArrayList<String>> purchaseHistory) {
+    public Shopper(String userName, String passWord, String encryptValue, List<String> cart, List<List<String>> purchaseHistory) {
         this.userName = userName;
         this.passWord = passWord;
         this.encryptValue = encryptValue;
-        this.cart = (ArrayList<String>)cart.clone();
+        this.cart = new ArrayList<>(cart);
         for (List<String> oldCart: purchaseHistory) {
-            this.purchaseHistory.add((List<String>)oldCart.clone());
+            this.purchaseHistory.add(new ArrayList<>(oldCart));
         }
     }
 
@@ -30,7 +31,7 @@ public class Shopper {
         this.encryptValue = encryptValue;
     }
 
-    public ArrayList<String> getCart() {
+    public List<String> getCart() {
         return this.cart;
     }
     public void addToCart(String item) {
@@ -43,12 +44,12 @@ public class Shopper {
         return this.cart.length;
     }
 
-    public ArrayList<ArrayList<String>> getPurchaseHistory() {
+    public List<List<String>> getPurchaseHistory() {
         return this.purchaseHistory;
     }
 
     public void makePurchase() {
-        this.purchaseHistory.add((ArrayList<String>)this.cart.clone());
+        this.purchaseHistory.add(new ArrayList<>(this.cart));
         this.cart.empty();
     }
 }

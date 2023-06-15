@@ -1,6 +1,7 @@
 package com.ashwinsclothingstore.springonlineshoppingapp.dtos;
 
 import com.ashwinsclothingstore.springonlineshoppingapp.models.ShoppingItem;
+import java.util.List;
 import java.util.ArrayList;
 
 public class ImageDataDto {
@@ -8,6 +9,6 @@ public class ImageDataDto {
 
     public ImageDataDto() {}
     public ImageDataDto(ArrayList<ShoppingItem> imageData) {
-        this.imageData = (ArrayList<ShoppingItem>)imageData.clone();
+        this.imageData = new ArrayList<>(imageData);
     }
 }
